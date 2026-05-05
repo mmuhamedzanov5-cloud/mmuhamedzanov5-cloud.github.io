@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>⚡ NeonMess</title>
     <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.7.4.0.min.js"></script>
     <style>
@@ -73,12 +73,13 @@
             transition: background var(--transition), color var(--transition);
         }
 
+        /* ЭКРАН ВХОДА */
         .login-screen {
             height: 100dvh;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            background: linear-gradient(135deg, #1a0033 0%, #0a0a0a 50%, #00ff88 150%);
             padding: 20px;
         }
 
@@ -88,102 +89,336 @@
             padding: 30px 24px;
             width: 100%;
             max-width: 380px;
-            box-shadow: var(--shadow);
+            box-shadow: 0 0 40px rgba(0,255,136,0.3);
             text-align: center;
             transition: all var(--transition);
         }
 
-        .login-card .logo { font-size: 60px; margin-bottom: 10px; animation: pulse 2s infinite; }
-        @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.1)} }
+        .login-card .logo-img {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 10px;
+            display: block;
+        }
 
         .login-card h1 {
-            font-size: 28px; margin-bottom: 4px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            font-size: 28px;
+            margin-bottom: 4px;
+            background: linear-gradient(135deg, #00ff88, #9b59b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        .login-card p { color: var(--text-secondary); font-size: 14px; margin-bottom: 20px; }
+        .login-card p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
 
         .avatar-pick {
-            width: 80px; height: 80px; border-radius: 50%;
-            background: var(--primary); color: white;
-            display: inline-flex; align-items: center; justify-content: center;
-            font-size: 36px; cursor: pointer; margin-bottom: 16px;
-            overflow: hidden; border: 3px solid var(--primary); position: relative;
+            width: 80px; height: 80px;
+            border-radius: 50%;
+            background: #1a0033;
+            color: #00ff88;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            cursor: pointer;
+            margin-bottom: 16px;
+            overflow: hidden;
+            border: 3px solid #00ff88;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,255,136,0.5);
         }
+
         .avatar-pick img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
-        .avatar-pick .overlay { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.5); color: white; font-size: 10px; padding: 4px; }
+        .avatar-pick .overlay {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            background: rgba(0,0,0,0.7); color: #00ff88;
+            font-size: 10px; padding: 4px;
+        }
 
         .input-group { margin-bottom: 14px; text-align: left; }
         .input-group label { display: block; font-size: 13px; color: var(--text-secondary); margin-bottom: 4px; font-weight: 500; }
         .input-group input {
-            width: 100%; padding: 12px 14px; border: 2px solid var(--border);
-            border-radius: var(--radius-sm); font-size: 15px; background: var(--input-bg); color: var(--text);
+            width: 100%; padding: 12px 14px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 15px;
+            background: var(--input-bg);
+            color: var(--text);
+            transition: all var(--transition);
         }
-        .input-group input:focus { outline: none; border-color: var(--primary); }
+        .input-group input:focus { outline: none; border-color: #00ff88; }
 
         .btn {
-            width: 100%; padding: 14px; border: none; border-radius: var(--radius-sm);
+            width: 100%; padding: 14px; border: none;
+            border-radius: var(--radius-sm);
             font-size: 15px; font-weight: 700; cursor: pointer;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            background: linear-gradient(135deg, #00ff88, #9b59b6);
             color: white; letter-spacing: 0.5px;
+            transition: all var(--transition);
         }
         .btn:active { transform: scale(0.97); }
+        .btn-outline {
+            width: 100%; padding: 12px; border: 2px solid #00ff88;
+            border-radius: var(--radius-sm);
+            font-size: 14px; font-weight: 600; cursor: pointer;
+            background: transparent; color: #00ff88;
+            margin-top: 8px; transition: all var(--transition);
+        }
         .error-msg { color: #ef4444; font-size: 13px; margin-top: 8px; display: none; }
 
-        .app { height: 100dvh; display: none; background: var(--bg); }
-        @media (min-width: 768px) { .app { display: none; flex-direction: row; max-width: 1200px; height: 92dvh; margin: 2dvh auto; border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; } }
+        /* ПРИЛОЖЕНИЕ */
+        .app {
+            height: 100dvh;
+            display: none;
+            background: var(--bg);
+        }
 
-        .sidebar { width: 100%; height: 100%; display: flex; flex-direction: column; background: var(--sidebar-bg); border-right: 1px solid var(--border); }
-        @media (min-width: 768px) { .sidebar { width: 340px; min-width: 340px; } }
+        @media (min-width: 768px) {
+            .app {
+                display: none;
+                flex-direction: row;
+                max-width: 1200px;
+                height: 92dvh;
+                margin: 2dvh auto;
+                border-radius: var(--radius);
+                box-shadow: var(--shadow);
+                overflow: hidden;
+            }
+        }
 
-        .sidebar-header { padding: 12px 14px; background: var(--header-bg); border-bottom: 1px solid var(--border); }
-        .profile-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-        .my-avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 16px; overflow: hidden; font-weight: bold; color: white; }
-        .my-avatar img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
-        .my-info { flex: 1; }
-        .my-name { font-weight: 600; font-size: 14px; }
+        .sidebar {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            background: var(--sidebar-bg);
+            border-right: 1px solid var(--border);
+        }
+
+        @media (min-width: 768px) {
+            .sidebar {
+                width: 340px;
+                min-width: 340px;
+            }
+        }
+
+        .sidebar-header {
+            padding: 12px 14px;
+            background: var(--header-bg);
+            border-bottom: 1px solid var(--border);
+            position: relative;
+        }
+
+        .profile-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .my-avatar {
+            width: 38px; height: 38px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            overflow: hidden;
+            font-weight: bold;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .my-avatar img {
+            width: 100%; height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .my-info { flex: 1; min-width: 0; }
+        .my-name { font-weight: 600; font-size: 14px; color: var(--text); }
         .my-status { font-size: 11px; color: var(--text-secondary); }
-        .theme-btn { background: var(--hover); border: none; color: var(--text); width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; }
-        .logout-btn { background: var(--hover); border: none; color: var(--text-secondary); padding: 5px 10px; border-radius: 14px; font-size: 11px; cursor: pointer; }
-        .search-box { width: 100%; padding: 9px 12px; border: none; border-radius: 20px; background: var(--input-bg); color: var(--text); font-size: 13px; }
+
+        .theme-btn {
+            background: var(--hover);
+            border: none;
+            color: var(--text);
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logout-btn {
+            background: var(--hover);
+            border: none;
+            color: var(--text-secondary);
+            padding: 5px 10px;
+            border-radius: 14px;
+            font-size: 11px;
+            cursor: pointer;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 9px 12px;
+            border: none;
+            border-radius: 20px;
+            background: var(--input-bg);
+            color: var(--text);
+            font-size: 13px;
+        }
+
         .search-box::placeholder { color: var(--text-secondary); }
         .search-box:focus { outline: none; background: var(--hover); }
 
-        .users-list { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
-        .section-title { padding: 8px 14px 4px; font-size: 10px; text-transform: uppercase; color: var(--text-secondary); letter-spacing: 1px; font-weight: 700; }
-        .user-item { display: flex; align-items: center; padding: 10px 14px; cursor: pointer; gap: 10px; transition: background var(--transition); }
+        .users-list {
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .section-title {
+            padding: 8px 14px 4px;
+            font-size: 10px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            letter-spacing: 1px;
+            font-weight: 700;
+        }
+
+        .user-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 14px;
+            cursor: pointer;
+            gap: 10px;
+        }
+
         .user-item:hover { background: var(--hover); }
         .user-item.selected { background: var(--hover); border-left: 3px solid var(--primary); }
-        .user-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; overflow: hidden; flex-shrink: 0; }
+
+        .user-avatar {
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
         .user-avatar img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
         .user-info { flex: 1; min-width: 0; }
-        .user-name { font-weight: 600; font-size: 14px; }
+        .user-name { font-weight: 600; font-size: 14px; color: var(--text); }
         .user-last { font-size: 12px; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .online-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--online); flex-shrink: 0; box-shadow: 0 0 6px var(--online); }
 
-        .chat-area { flex: 1; display: flex; flex-direction: column; background: var(--bg-chat); }
-        @media (max-width: 767px) { .chat-area { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 10; transform: translateX(100%); transition: transform var(--transition); } .chat-area.active { transform: translateX(0); } }
+        /* ЧАТ */
+        .chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-chat);
+        }
 
-        .chat-header { padding: 10px 14px; background: var(--header-bg); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
-        .back-btn { display: none; background: none; border: none; font-size: 20px; cursor: pointer; color: var(--primary); }
-        @media (max-width: 767px) { .back-btn { display: block; } }
-        .chat-avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; overflow: hidden; }
+        @media (max-width: 767px) {
+            .chat-area {
+                position: fixed;
+                top: 0; left: 0; right: 0; bottom: 0;
+                z-index: 10;
+                transform: translateX(100%);
+                transition: transform var(--transition);
+            }
+            .chat-area.active { transform: translateX(0); }
+        }
+
+        .chat-header {
+            padding: 10px 14px;
+            background: var(--header-bg);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .back-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--primary);
+        }
+
+        @media (max-width: 767px) {
+            .back-btn { display: block; }
+        }
+
+        .chat-avatar {
+            width: 38px; height: 38px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 16px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
         .chat-avatar img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
-        .chat-name { font-weight: 600; font-size: 14px; }
+        .chat-name { font-weight: 600; font-size: 14px; color: var(--text); }
         .chat-status { font-size: 11px; color: var(--text-secondary); }
 
-        .messages-container { flex: 1; overflow-y: auto; padding: 12px 14px; -webkit-overflow-scrolling: touch; }
+        .messages-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px 14px;
+            -webkit-overflow-scrolling: touch;
+        }
+
         .msg-row { display: flex; margin-bottom: 4px; position: relative; }
         .msg-row.sent { justify-content: flex-end; }
 
         .msg-bubble {
-            max-width: 75%; padding: 8px 14px; border-radius: 18px;
-            word-wrap: break-word; line-height: 1.4; font-size: 14px;
-            position: relative; cursor: pointer;
+            max-width: 75%;
+            padding: 8px 14px;
+            border-radius: 18px;
+            word-wrap: break-word;
+            line-height: 1.4;
+            font-size: 14px;
+            position: relative;
+            cursor: pointer;
         }
-        .msg-row.sent .msg-bubble { background: var(--bubble-sent); color: white; border-bottom-right-radius: 4px; }
-        .msg-row.received .msg-bubble { background: var(--bubble-received); color: var(--text); border-bottom-left-radius: 4px; box-shadow: var(--bubble-received-shadow); }
+
+        .msg-row.sent .msg-bubble {
+            background: var(--bubble-sent);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .msg-row.received .msg-bubble {
+            background: var(--bubble-received);
+            color: var(--text);
+            border-bottom-left-radius: 4px;
+            box-shadow: var(--bubble-received-shadow);
+        }
 
         .msg-time { font-size: 10px; color: var(--text-secondary); padding: 2px 6px; opacity: 0.7; }
 
@@ -191,67 +426,198 @@
         .reactions-bar {
             display: flex; gap: 4px; flex-wrap: wrap; margin-top: 2px; padding: 0 6px;
         }
+
         .reaction-item {
-            background: var(--bg-secondary); border: 1px solid var(--border);
-            border-radius: 12px; padding: 2px 6px; font-size: 13px;
-            cursor: pointer; transition: all var(--transition);
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2px 6px;
+            font-size: 13px;
+            cursor: pointer;
         }
+
         .reaction-item:hover { background: var(--hover); }
         .reaction-item.active { background: var(--primary); color: white; border-color: var(--primary); }
 
         .reaction-picker {
-            display: none; position: absolute; bottom: -40px; left: 0;
-            background: var(--bg-secondary); border-radius: 20px;
-            box-shadow: var(--shadow); padding: 6px 10px;
-            gap: 4px; z-index: 50; border: 1px solid var(--border);
+            display: none;
+            position: absolute;
+            bottom: -44px;
+            left: 0;
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            padding: 6px 10px;
+            gap: 4px;
+            z-index: 50;
+            border: 1px solid var(--border);
+            white-space: nowrap;
         }
+
         .reaction-picker.active { display: flex; }
+
         .reaction-picker span {
-            font-size: 20px; cursor: pointer; padding: 4px;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 4px;
             transition: transform var(--transition);
         }
+
         .reaction-picker span:hover { transform: scale(1.3); }
 
-        .input-area { padding: 10px 12px; background: var(--header-bg); border-top: 1px solid var(--border); display: flex; gap: 8px; align-items: center; padding-bottom: max(10px, env(safe-area-inset-bottom)); }
-        .msg-input { flex: 1; padding: 10px 14px; border: none; border-radius: 20px; font-size: 14px; font-family: inherit; background: var(--input-bg); color: var(--text); }
+        .input-area {
+            padding: 10px 12px;
+            background: var(--header-bg);
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            padding-bottom: max(10px, env(safe-area-inset-bottom));
+        }
+
+        .msg-input {
+            flex: 1;
+            padding: 10px 14px;
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+            font-family: inherit;
+            background: var(--input-bg);
+            color: var(--text);
+        }
+
         .msg-input:focus { outline: none; background: var(--hover); }
-        .send-btn { width: 38px; height: 38px; border-radius: 50%; background: var(--primary); color: white; border: none; cursor: pointer; font-size: 16px; flex-shrink: 0; }
+
+        .send-btn {
+            width: 38px; height: 38px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
         .send-btn:active { transform: scale(0.9); }
-        .empty-chat { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: var(--text-secondary); text-align: center; }
+
+        .empty-chat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
         .empty-chat .icon { font-size: 50px; margin-bottom: 10px; opacity: 0.5; }
 
-        .theme-menu { display: none; position: absolute; top: 50px; right: 10px; background: var(--bg-secondary); border-radius: var(--radius-sm); box-shadow: var(--shadow); z-index: 200; overflow: hidden; border: 1px solid var(--border); }
+        .theme-menu {
+            display: none;
+            position: absolute;
+            top: 50px;
+            right: 10px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow);
+            z-index: 200;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
         .theme-menu.active { display: block; }
-        .theme-menu div { padding: 10px 16px; cursor: pointer; font-size: 13px; color: var(--text); display: flex; align-items: center; gap: 8px; }
+
+        .theme-menu div {
+            padding: 10px 16px;
+            cursor: pointer;
+            font-size: 13px;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
         .theme-menu div:hover { background: var(--hover); }
 
-        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--bg-secondary); color: var(--text); padding: 10px 20px; border-radius: 20px; font-size: 13px; z-index: 999; box-shadow: var(--shadow); animation: fadeIn 0.3s; white-space: nowrap; border: 1px solid var(--border); }
-        @keyframes fadeIn { from{opacity:0;transform:translateX(-50%) translateY(10px)} to{opacity:1;transform:translateX(-50%) translateY(0)} }
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-secondary);
+            color: var(--text);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 13px;
+            z-index: 999;
+            box-shadow: var(--shadow);
+            animation: fadeIn 0.3s;
+            white-space: nowrap;
+            border: 1px solid var(--border);
+        }
 
-        .sidebar-header { position: relative; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
     </style>
 </head>
 <body>
 
+    <!-- ЭКРАН ВХОДА -->
     <div class="login-screen" id="loginScreen">
         <div class="login-card">
-            <div class="logo">⚡</div>
+            <!-- Логотип NeonMess -->
+            <svg class="logo-img" viewBox="0 0 200 200">
+                <defs>
+                    <linearGradient id="neonGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#00ff88"/>
+                        <stop offset="100%" style="stop-color:#9b59b6"/>
+                    </linearGradient>
+                    <filter id="glow">
+                        <feGaussianBlur stdDeviation="3" result="blur"/>
+                        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                    </filter>
+                </defs>
+                <rect x="20" y="40" width="160" height="120" rx="20" fill="none" stroke="url(#neonGrad)" stroke-width="6" filter="url(#glow)"/>
+                <text x="100" y="115" text-anchor="middle" font-family="Arial Black" font-size="40" fill="url(#neonGrad)" filter="url(#glow)">NM</text>
+            </svg>
             <h1>NeonMess</h1>
             <p>Яркое общение с друзьями</p>
-            <div class="avatar-pick" id="loginAvatar" onclick="document.getElementById('avatarFile').click()">👤<div class="overlay">Аватар</div></div>
+            
+            <div class="avatar-pick" id="loginAvatar" onclick="document.getElementById('avatarFile').click()">
+                👤
+                <div class="overlay">Аватар</div>
+            </div>
             <input type="file" id="avatarFile" accept="image/*" style="display:none" onchange="pickAvatar(event)">
-            <div class="input-group"><label>Твой никнейм</label><input type="text" id="nicknameInput" placeholder="Придумай ник" maxlength="15" autocomplete="off"></div>
+            
+            <div class="input-group">
+                <label>Твой никнейм</label>
+                <input type="text" id="nicknameInput" placeholder="Придумай ник" maxlength="15" autocomplete="off">
+            </div>
+
+            <div class="input-group">
+                <label>Пароль</label>
+                <input type="password" id="passwordInput" placeholder="Придумай пароль" maxlength="20" autocomplete="off">
+            </div>
+            
             <button class="btn" onclick="login()">⚡ Войти</button>
+            <button class="btn-outline" onclick="toggleMode()">📝 Уже есть аккаунт</button>
             <div class="error-msg" id="loginError"></div>
         </div>
     </div>
 
+    <!-- ПРИЛОЖЕНИЕ -->
     <div class="app" id="app">
         <div class="sidebar">
             <div class="sidebar-header">
                 <div class="profile-row">
                     <div class="my-avatar" id="myAvatarSmall">👤</div>
-                    <div class="my-info"><div class="my-name" id="myNameDisplay">Я</div><div class="my-status">🟢 Онлайн</div></div>
+                    <div class="my-info">
+                        <div class="my-name" id="myNameDisplay">Я</div>
+                        <div class="my-status">🟢 Онлайн</div>
+                    </div>
                     <button class="theme-btn" onclick="toggleThemeMenu()">🎨</button>
                     <button class="logout-btn" onclick="logout()">Выйти</button>
                 </div>
@@ -273,10 +639,13 @@
             <div class="chat-header">
                 <button class="back-btn" onclick="closeChat()">←</button>
                 <div class="chat-avatar" id="chatAvatar">💬</div>
-                <div><div class="chat-name" id="chatName">Выбери друга</div><div class="chat-status" id="chatStatus"></div></div>
+                <div>
+                    <div class="chat-name" id="chatName">Выбери друга</div>
+                    <div class="chat-status" id="chatStatus"></div>
+                </div>
             </div>
             <div class="messages-container" id="messagesContainer">
-                <div class="empty-chat"><div class="icon">💬</div><p>Выбери пользователя для общения</p></div>
+                <div class="empty-chat"><div class="icon">💬</div><p>Выбери пользователя</p></div>
             </div>
             <div class="input-area">
                 <input type="text" class="msg-input" id="messageInput" placeholder="Напиши сообщение..." onkeypress="if(event.key==='Enter'){event.preventDefault();sendMsg();}" autocomplete="off">
@@ -292,11 +661,12 @@
         let pubnub;
         let myUsername = '';
         let myAvatar = '';
+        let myPassword = '';
         let currentChat = null;
         let onlineUsers = [];
         let allMessages = {};
         let tempAvatar = '';
-        let activeReactionMsgId = null;
+        let isLoginMode = true; // true = регистрация, false = вход
 
         const COLORS = ['#667eea','#9b59b6','#00ff88','#ff6b6b','#4facfe','#f093fb','#43e97b','#fa709a'];
         const REACTIONS = ['❤️','🔥','😂','😢','😮','👏'];
@@ -306,11 +676,28 @@
             localStorage.setItem('neonmess-theme', theme);
             document.getElementById('themeMenu').classList.remove('active');
         }
-        function toggleThemeMenu() { document.getElementById('themeMenu').classList.toggle('active'); }
-        document.addEventListener('click', (e) => { if (!e.target.closest('.theme-btn')) document.getElementById('themeMenu').classList.remove('active'); });
 
-        const savedTheme = localStorage.getItem('neonmess-theme') || 'light';
+        function toggleThemeMenu() { document.getElementById('themeMenu').classList.toggle('active'); }
+
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.theme-btn')) document.getElementById('themeMenu').classList.remove('active');
+        });
+
+        const savedTheme = localStorage.getItem('neonmess-theme') || 'dark';
         setTheme(savedTheme);
+
+        function toggleMode() {
+            isLoginMode = !isLoginMode;
+            const btn = document.querySelector('.btn-outline');
+            const title = document.querySelector('.login-card h1');
+            if (isLoginMode) {
+                btn.textContent = '📝 Уже есть аккаунт';
+                title.textContent = 'Создать аккаунт';
+            } else {
+                btn.textContent = '✨ Создать аккаунт';
+                title.textContent = 'Войти';
+            }
+        }
 
         function pickAvatar(e) {
             const file = e.target.files[0];
@@ -336,28 +723,74 @@
 
         function login() {
             const nick = document.getElementById('nicknameInput').value.trim();
+            const pass = document.getElementById('passwordInput').value.trim();
+
             if (!nick || nick.length < 2) {
-                const el = document.getElementById('loginError');
-                el.textContent = 'Никнейм должен быть не менее 2 символов';
-                el.style.display = 'block';
-                setTimeout(() => el.style.display = 'none', 3000);
+                showError('Никнейм должен быть не менее 2 символов');
                 return;
             }
+            if (!pass || pass.length < 3) {
+                showError('Пароль должен быть не менее 3 символов');
+                return;
+            }
+
+            if (isLoginMode) {
+                // Регистрация
+                const existingPass = localStorage.getItem(`neonmess_pass_${nick}`);
+                if (existingPass) {
+                    showError('Этот никнейм уже занят!');
+                    return;
+                }
+                localStorage.setItem(`neonmess_pass_${nick}`, pass);
+            } else {
+                // Вход
+                const savedPass = localStorage.getItem(`neonmess_pass_${nick}`);
+                if (!savedPass) {
+                    showError('Аккаунт не найден');
+                    return;
+                }
+                if (savedPass !== pass) {
+                    showError('Неверный пароль');
+                    return;
+                }
+            }
+
             myUsername = nick;
             myAvatar = tempAvatar;
+
             document.getElementById('loginScreen').style.display = 'none';
             const app = document.getElementById('app');
             app.style.display = '';
             if (window.innerWidth >= 768) app.style.display = 'flex';
-            document.getElementById('myAvatarSmall').innerHTML = myAvatar ? `<img src="${myAvatar}">` : myUsername.charAt(0).toUpperCase();
+
+            document.getElementById('myAvatarSmall').innerHTML = myAvatar
+                ? `<img src="${myAvatar}">`
+                : myUsername.charAt(0).toUpperCase();
             document.getElementById('myNameDisplay').textContent = myUsername;
+
             loadFromStorage();
             initPubNub();
+
+            // Сохраняем
+            localStorage.setItem('neonmess_username', myUsername);
+            localStorage.setItem('neonmess_avatar', myAvatar || '');
+        }
+
+        function showError(msg) {
+            const el = document.getElementById('loginError');
+            el.textContent = msg;
+            el.style.display = 'block';
+            setTimeout(() => el.style.display = 'none', 3000);
         }
 
         function initPubNub() {
             if (pubnub) { pubnub.unsubscribeAll(); }
-            pubnub = new PubNub({ publishKey: PUBNUB_PUBLISH_KEY, subscribeKey: PUBNUB_SUBSCRIBE_KEY, uuid: myUsername });
+            pubnub = new PubNub({
+                publishKey: PUBNUB_PUBLISH_KEY,
+                subscribeKey: PUBNUB_SUBSCRIBE_KEY,
+                uuid: myUsername
+            });
+
             pubnub.addListener({
                 message: (event) => {
                     const msg = event.message;
@@ -376,15 +809,22 @@
                 },
                 presence: (event) => {
                     if (event.action === 'join') {
-                        if (!onlineUsers.includes(event.uuid) && event.uuid !== myUsername) { onlineUsers.push(event.uuid); renderUserList(); }
+                        if (!onlineUsers.includes(event.uuid) && event.uuid !== myUsername) {
+                            onlineUsers.push(event.uuid);
+                            renderUserList();
+                        }
                     } else if (event.action === 'leave' || event.action === 'timeout') {
                         onlineUsers = onlineUsers.filter(u => u !== event.uuid);
                         renderUserList();
                     }
                 }
             });
+
             pubnub.subscribe({ channels: ['friends-chat-main'] });
-            pubnub.publish({ channel: 'friends-chat-main', message: { type: 'presence', user: myUsername, action: 'join' } });
+            pubnub.publish({
+                channel: 'friends-chat-main',
+                message: { type: 'presence', user: myUsername, action: 'join' }
+            });
         }
 
         function sendMsg() {
@@ -392,8 +832,19 @@
             const input = document.getElementById('messageInput');
             const text = input.value.trim();
             if (!text) return;
-            const msg = { id: Date.now().toString(), type: 'msg', from: myUsername, channel: currentChat, text, time: new Date().toISOString(), reactions: {} };
+
+            const msg = {
+                id: Date.now().toString(),
+                type: 'msg',
+                from: myUsername,
+                channel: currentChat,
+                text,
+                time: new Date().toISOString(),
+                reactions: {}
+            };
+
             pubnub.publish({ channel: currentChat, message: msg });
+
             if (!allMessages[currentChat]) allMessages[currentChat] = [];
             allMessages[currentChat].push(msg);
             saveToStorage();
@@ -404,18 +855,25 @@
 
         function addReaction(msgId, emoji) {
             if (!currentChat || !pubnub) return;
-            const msg = allMessages[currentChat].find(m => m.id === msgId);
+            const msgList = allMessages[currentChat];
+            if (!msgList) return;
+            const msg = msgList.find(m => m.id === msgId);
             if (!msg) return;
             if (!msg.reactions) msg.reactions = {};
+
             if (!msg.reactions[emoji]) msg.reactions[emoji] = [];
             const idx = msg.reactions[emoji].indexOf(myUsername);
-            if (idx !== -1) { msg.reactions[emoji].splice(idx, 1); if (msg.reactions[emoji].length === 0) delete msg.reactions[emoji]; }
-            else { msg.reactions[emoji].push(myUsername); }
+            if (idx !== -1) {
+                msg.reactions[emoji].splice(idx, 1);
+                if (msg.reactions[emoji].length === 0) delete msg.reactions[emoji];
+            } else {
+                msg.reactions[emoji].push(myUsername);
+            }
+
             msg.type = 'reaction';
             pubnub.publish({ channel: currentChat, message: msg });
             saveToStorage();
             renderMessages();
-            activeReactionMsgId = null;
             document.querySelectorAll('.reaction-picker').forEach(p => p.classList.remove('active'));
         }
 
@@ -425,7 +883,7 @@
             const isSent = msg.from === myUsername;
             row.className = `msg-row ${isSent ? 'sent' : 'received'}`;
             row.id = `msg-${msg.id}`;
-            
+
             let reactionsHTML = '';
             if (msg.reactions && Object.keys(msg.reactions).length > 0) {
                 reactionsHTML = '<div class="reactions-bar">';
@@ -438,23 +896,34 @@
 
             const pickerHTML = `<div class="reaction-picker" id="picker-${msg.id}">${REACTIONS.map(r => `<span onclick="addReaction('${msg.id}','${r}')">${r}</span>`).join('')}</div>`;
 
-            row.innerHTML = `<div class="msg-bubble" onclick="toggleReactionPicker('${msg.id}')" oncontextmenu="event.preventDefault();toggleReactionPicker('${msg.id}')">${esc(msg.text)}${pickerHTML}</div>${reactionsHTML}`;
+            row.innerHTML = `
+                <div class="msg-bubble" onclick="toggleReactionPicker('${msg.id}')" oncontextmenu="event.preventDefault();toggleReactionPicker('${msg.id}')">
+                    ${esc(msg.text)}
+                    ${pickerHTML}
+                </div>
+                ${reactionsHTML}
+            `;
+
             container.appendChild(row);
             container.scrollTop = container.scrollHeight;
         }
 
         function toggleReactionPicker(msgId) {
-            document.querySelectorAll('.reaction-picker').forEach(p => { if (p.id !== `picker-${msgId}`) p.classList.remove('active'); });
+            document.querySelectorAll('.reaction-picker').forEach(p => {
+                if (p.id !== `picker-${msgId}`) p.classList.remove('active');
+            });
             const picker = document.getElementById(`picker-${msgId}`);
             if (picker) picker.classList.toggle('active');
-            activeReactionMsgId = msgId;
         }
 
         function renderMessages() {
             const container = document.getElementById('messagesContainer');
             container.innerHTML = '';
             const msgs = allMessages[currentChat] || [];
-            if (msgs.length === 0) { container.innerHTML = '<div class="empty-chat"><div class="icon">💬</div><p>Нет сообщений</p></div>'; return; }
+            if (msgs.length === 0) {
+                container.innerHTML = '<div class="empty-chat"><div class="icon">💬</div><p>Нет сообщений</p></div>';
+                return;
+            }
             msgs.forEach(m => addMsgToDOM(m));
         }
 
@@ -487,8 +956,16 @@
                 : others.map(u => {
                     const sel = currentChat === u ? ' selected' : '';
                     const lastMsg = allMessages[u]?.slice(-1)[0];
-                    const lastText = lastMsg ? (lastMsg.text ? lastMsg.text.substring(0,30) : '❤️ Реакция') : '';
-                    return `<div class="user-item${sel}" onclick="openChat('${u}')"><div class="user-avatar" style="background:${getColor(u)}">${u.charAt(0).toUpperCase()}</div><div class="user-info"><div class="user-name">${u}</div><div class="user-last">${lastText || 'Нет сообщений'}</div></div><div class="online-dot"></div></div>`;
+                    const lastText = lastMsg ? (lastMsg.text ? lastMsg.text.substring(0, 30) : '❤️ Реакция') : '';
+                    return `
+                        <div class="user-item${sel}" onclick="openChat('${u}')">
+                            <div class="user-avatar" style="background:${getColor(u)}">${u.charAt(0).toUpperCase()}</div>
+                            <div class="user-info">
+                                <div class="user-name">${u}</div>
+                                <div class="user-last">${lastText || 'Нет сообщений'}</div>
+                            </div>
+                            <div class="online-dot"></div>
+                        </div>`;
                 }).join('');
         }
 
@@ -500,18 +977,63 @@
             });
         }
 
-        function getColor(name) { let h = 0; for (let i=0;i<name.length;i++) h=name.charCodeAt(i)+((h<<5)-h); return COLORS[Math.abs(h)%COLORS.length]; }
-        function logout() { if(pubnub){pubnub.unsubscribeAll();pubnub=null;} myUsername='';myAvatar='';currentChat=null;onlineUsers=[];allMessages={};document.getElementById('loginScreen').style.display='flex';document.getElementById('app').style.display='none';document.getElementById('chatArea').classList.remove('active'); }
+        function getColor(name) {
+            let h = 0;
+            for (let i = 0; i < name.length; i++) h = name.charCodeAt(i) + ((h << 5) - h);
+            return COLORS[Math.abs(h) % COLORS.length];
+        }
+
+        function logout() {
+            if (pubnub) { pubnub.unsubscribeAll(); pubnub = null; }
+            myUsername = ''; myAvatar = ''; currentChat = null;
+            onlineUsers = []; allMessages = {};
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('app').style.display = 'none';
+            document.getElementById('chatArea').classList.remove('active');
+            document.getElementById('nicknameInput').value = '';
+            document.getElementById('passwordInput').value = '';
+        }
 
         function saveToStorage() {
-            try { const data={}; for(const[u,m]of Object.entries(allMessages)){data[u]=m.slice(-500);} localStorage.setItem(`neonmess_msgs_${myUsername}`,JSON.stringify(data)); localStorage.setItem('neonmess_username',myUsername); localStorage.setItem('neonmess_avatar',myAvatar); } catch(e){}
+            try {
+                const data = {};
+                for (const [user, msgs] of Object.entries(allMessages)) {
+                    data[user] = msgs.slice(-500);
+                }
+                localStorage.setItem(`neonmess_msgs_${myUsername}`, JSON.stringify(data));
+                localStorage.setItem('neonmess_username', myUsername);
+                localStorage.setItem('neonmess_avatar', myAvatar);
+            } catch(e) {}
         }
-        function loadFromStorage() { const s=localStorage.getItem(`neonmess_msgs_${myUsername}`); if(s){try{allMessages=JSON.parse(s);}catch(e){allMessages={};}} }
-        function esc(s) { const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
 
+        function loadFromStorage() {
+            const saved = localStorage.getItem(`neonmess_msgs_${myUsername}`);
+            if (saved) {
+                try { allMessages = JSON.parse(saved); } catch(e) { allMessages = {}; }
+            }
+        }
+
+        function esc(s) {
+            const div = document.createElement('div');
+            div.textContent = s;
+            return div.innerHTML;
+        }
+
+        // Автовход
         const savedUser = localStorage.getItem('neonmess_username');
         const savedAvatar = localStorage.getItem('neonmess_avatar');
-        if (savedUser) { document.getElementById('nicknameInput').value = savedUser; myUsername = savedUser; myAvatar = savedAvatar || ''; if (savedAvatar) { document.getElementById('loginAvatar').innerHTML = `<img src="${savedAvatar}"><div class="overlay">Аватар</div>`; tempAvatar = savedAvatar; } setTimeout(login, 500); }
+        if (savedUser) {
+            myUsername = savedUser;
+            myAvatar = savedAvatar || '';
+            document.getElementById('nicknameInput').value = savedUser;
+            if (savedAvatar) {
+                document.getElementById('loginAvatar').innerHTML = `<img src="${savedAvatar}"><div class="overlay">Аватар</div>`;
+                tempAvatar = savedAvatar;
+            }
+            document.getElementById('passwordInput').placeholder = 'Введи пароль';
+            isLoginMode = false;
+            document.querySelector('.btn-outline').textContent = '✨ Создать аккаунт';
+        }
     </script>
 </body>
 </html>
