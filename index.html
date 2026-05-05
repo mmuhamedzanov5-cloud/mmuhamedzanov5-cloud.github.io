@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>⚡ NeonMess</title>
-    <script src="https://cdn.ably.com/lib/ably.min-1.js"></script>
+    <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.7.4.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <style>
         :root { --bg:#0a0f0a;--bg2:#111a11;--chat-bg:#0a0f0a;--text:#c8e6c8;--text2:#8fbc8f;--bubble-sent:#1a3a1a;--bubble-rec:#152015;--header:#111a11;--border:#2a3a2a;--online:#5aeb5a;--accent:#3adb3a;--accent2:#2a8a2a;--input:#152015;--hover:rgba(58,219,58,0.05);--shadow:0 0 20px rgba(58,219,58,0.08);--snow:block; }
@@ -153,8 +153,8 @@
         </div>
     </div>
     <script>
-        var ABLY_KEY = "btJ6Mg.yddMAw:yL89TzO4FWwtxI0ZYhXfbkeK0n-DH89bqQ34Jontots";
-        var ably, channel, me='', myAva='', cur='', onl=[], msgs={}, tmpAva='', reg=true, refInt, stories={}, mr, ach=[], rec=false;
+        var PUB="pub-c-e79dda66-e077-413a-ac73-e4d09bd67dfa",SUB="sub-c-f39c2da1-0f5e-4635-9f2a-18459534de30";
+        var pn,me='',myAva='',cur='',onl=[],msgs={},tmpAva='',reg=true,refInt,stories={},mr,ach=[],rec=false;
         var REAC=['❤️','🔥','😂','😢','😮','👏'];
 
         function snow(){var c=document.getElementById('snowContainer');c.innerHTML='';for(var i=0;i<30;i++){var f=document.createElement('div');f.className='snowflake';f.textContent='❄';f.style.left=Math.random()*100+'%';f.style.fontSize=(Math.random()*14+6)+'px';f.style.animationDuration=(Math.random()*5+5)+'s';f.style.animationDelay=Math.random()*5+'s';c.appendChild(f);}}
@@ -175,20 +175,19 @@
             me=l;myAva=tmpAva;document.getElementById('loginScreen').style.display='none';
             var app=document.getElementById('app');app.style.display='block';if(window.innerWidth>=768)app.style.display='flex';
             document.getElementById('myAvatarSmall').innerHTML=myAva?'<img src="'+myAva+'">':me.charAt(0).toUpperCase();
-            document.getElementById('myNameDisplay').textContent=me;load();initAbly();
+            document.getElementById('myNameDisplay').textContent=me;load();initPN();
             localStorage.setItem('nm_user',me);if(myAva)localStorage.setItem('nm_ava',myAva);
         }
         function err(m){var e=document.getElementById('loginError');e.textContent=m;e.style.display='block';setTimeout(function(){e.style.display='none';},3000);}
         function toast(m){var o=document.querySelector('.toast');if(o)o.remove();var t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(function(){t.remove();},2000);}
 
-        function initAbly(){
-            ably = new Ably.Realtime({key: ABLY_KEY, clientId: me});
-            channel = ably.channels.get('neonmess');
-
-            channel.subscribe(function(msg){
-                var m = msg.data;
+        function initPN(){
+            if(pn){pn.unsubscribeAll();}
+            pn=new PubNub({publishKey:PUB,subscribeKey:SUB,uuid:me});
+            pn.addListener({message:function(e){
+                var m=e.message;
                 if(m.type==='on'){if(m.u!==me&&onl.indexOf(m.u)===-1){onl.push(m.u);renderUsers();toast('👋 '+m.u+' в сети');}return;}
-                if(m.type==='who'){channel.publish('neonmess',{type:'on',u:me});return;}
+                if(m.type==='who'){pn.publish({channel:'neonmess',message:{type:'on',u:me}});return;}
                 if(m.type==='story'){if(!stories[m.u])stories[m.u]=[];stories[m.u].push({img:m.img,t:Date.now()});renderStoriesBar();return;}
                 if(m.type==='msg'||m.type==='voice'||m.type==='reaction'){
                     var key=m.to===me?m.from:(m.from===me?m.to:null);if(!key)return;
@@ -197,68 +196,36 @@
                     if(ex!==-1)msgs[key][ex]=m;else msgs[key].push(m);
                     save();if(cur===key)renderMsgs();renderUsers();
                 }
-            });
-
-            channel.publish({type:'on',u:me});
-            channel.publish({type:'who'});
+            }});
+            pn.subscribe({channels:['neonmess']});
+            setTimeout(function(){pn.publish({channel:'neonmess',message:{type:'on',u:me}});},300);
+            setTimeout(function(){pn.publish({channel:'neonmess',message:{type:'who'}});},800);
             if(refInt)clearInterval(refInt);
-            refInt=setInterval(function(){channel.publish({type:'who'});channel.publish({type:'on',u:me});},5000);
+            refInt=setInterval(function(){pn.publish({channel:'neonmess',message:{type:'who'}});pn.publish({channel:'neonmess',message:{type:'on',u:me}});},5000);
         }
 
-        function refreshUsers(){onl=[];renderUsers();if(channel){channel.publish({type:'on',u:me});setTimeout(function(){channel.publish({type:'who'});},300);}toast('🔄 Обновлено');}
-        function addStory(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(ev){if(!stories[me])stories[me]=[];stories[me].push({img:ev.target.result,t:Date.now()});renderStoriesBar();channel.publish({type:'story',u:me,img:ev.target.result});toast('📸 Готово!');};r.readAsDataURL(f);}
+        function refreshUsers(){onl=[];renderUsers();if(pn){pn.publish({channel:'neonmess',message:{type:'on',u:me}});setTimeout(function(){pn.publish({channel:'neonmess',message:{type:'who'}});},300);}toast('🔄 Обновлено');}
+        function addStory(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(ev){if(!stories[me])stories[me]=[];stories[me].push({img:ev.target.result,t:Date.now()});renderStoriesBar();pn.publish({channel:'neonmess',message:{type:'story',u:me,img:ev.target.result}});toast('📸 Готово!');};r.readAsDataURL(f);}
         function viewStory(u){var s=stories[u];if(!s||s.length===0){toast('Нет историй');return;}document.getElementById('storyImage').src=s[s.length-1].img;document.getElementById('storyViewer').classList.add('active');}
         function closeStory(){document.getElementById('storyViewer').classList.remove('active');}
-        function renderStoriesBar(){
-            var b=document.getElementById('storiesBar');var h='';
-            if(stories[me]&&stories[me].length>0){var s=stories[me];h+='<div class="story-item" onclick="viewStory(\''+me+'\')"><div class="story-ring"><div class="story-ring-inner"><img src="'+s[s.length-1].img+'"></div></div><div class="story-name">Я</div></div>';}
-            var ks=Object.keys(stories);for(var i=0;i<ks.length;i++){if(ks[i]===me)continue;var us=stories[ks[i]];if(us.length>0)h+='<div class="story-item" onclick="viewStory(\''+ks[i]+'\')"><div class="story-ring"><div class="story-ring-inner"><img src="'+us[us.length-1].img+'"></div></div><div class="story-name">'+ks[i]+'</div></div>';}
-            h+='<div class="story-item" onclick="document.getElementById(\'storyInput\').click()"><div class="story-ring"><div class="story-ring-inner" style="font-size:22px;color:var(--accent)">+</div></div><div class="story-name">Доб.</div></div>';
-            b.innerHTML=h;
-        }
+        function renderStoriesBar(){var b=document.getElementById('storiesBar');var h='';if(stories[me]&&stories[me].length>0){var s=stories[me];h+='<div class="story-item" onclick="viewStory(\''+me+'\')"><div class="story-ring"><div class="story-ring-inner"><img src="'+s[s.length-1].img+'"></div></div><div class="story-name">Я</div></div>';}var ks=Object.keys(stories);for(var i=0;i<ks.length;i++){if(ks[i]===me)continue;var us=stories[ks[i]];if(us.length>0)h+='<div class="story-item" onclick="viewStory(\''+ks[i]+'\')"><div class="story-ring"><div class="story-ring-inner"><img src="'+us[us.length-1].img+'"></div></div><div class="story-name">'+ks[i]+'</div></div>';}h+='<div class="story-item" onclick="document.getElementById(\'storyInput\').click()"><div class="story-ring"><div class="story-ring-inner" style="font-size:22px;color:var(--accent)">+</div></div><div class="story-name">Доб.</div></div>';b.innerHTML=h;}
 
         function toggleVoice(){if(rec)stopRec();else startRec();}
         async function startRec(){try{var s=await navigator.mediaDevices.getUserMedia({audio:true});mr=new MediaRecorder(s);ach=[];mr.ondataavailable=function(e){if(e.data.size>0)ach.push(e.data);};mr.onstop=function(){var b=new Blob(ach,{type:'audio/webm'});var r=new FileReader();r.onload=function(ev){sendVoice(ev.target.result);};r.readAsDataURL(b);s.getTracks().forEach(function(t){t.stop();});};mr.start();rec=true;document.getElementById('voiceBtn').classList.add('recording');document.getElementById('voiceBtn').textContent='⏹';toast('🎤 Запись...');setTimeout(function(){if(rec)stopRec();},15000);}catch(e){toast('❌ Нет микрофона');}}
         function stopRec(){if(mr&&rec){mr.stop();rec=false;document.getElementById('voiceBtn').classList.remove('recording');document.getElementById('voiceBtn').textContent='🎤';}}
-        function sendVoice(d){if(!cur||!channel)return;var m={id:Date.now().toString(),type:'voice',from:me,to:cur,audio:d,t:new Date().toISOString(),reactions:{}};channel.publish(m);if(!msgs[cur])msgs[cur]=[];msgs[cur].push(m);save();renderMsgs();}
+        function sendVoice(d){if(!cur||!pn)return;var m={id:Date.now().toString(),type:'voice',from:me,to:cur,audio:d,t:new Date().toISOString(),reactions:{}};pn.publish({channel:'neonmess',message:m});if(!msgs[cur])msgs[cur]=[];msgs[cur].push(m);save();renderMsgs();}
 
-        function sendMsg(){
-            if(!cur||!channel)return;var t=document.getElementById('messageInput').value.trim();if(!t)return;
-            var m={id:Date.now().toString(),type:'msg',from:me,to:cur,text:t,t:new Date().toISOString(),reactions:{}};
-            channel.publish(m);
-            if(!msgs[cur])msgs[cur]=[];msgs[cur].push(m);save();renderMsgs();
-            document.getElementById('messageInput').value='';document.getElementById('messageInput').focus();
-        }
-
-        function addReaction(id,em){
-            if(!cur||!channel)return;var ml=msgs[cur];if(!ml)return;var m=null;for(var i=0;i<ml.length;i++){if(ml[i].id===id){m=ml[i];break;}}if(!m)return;
-            if(!m.reactions)m.reactions={};if(!m.reactions[em])m.reactions[em]=[];var idx=m.reactions[em].indexOf(me);
-            if(idx!==-1){m.reactions[em].splice(idx,1);if(m.reactions[em].length===0)delete m.reactions[em];}else m.reactions[em].push(me);
-            m.type='reaction';channel.publish(m);save();renderMsgs();
-            document.querySelectorAll('.reaction-picker').forEach(function(p){p.classList.remove('active');});
-        }
-
-        function addMsgDOM(m){
-            var c=document.getElementById('messagesContainer'),r=document.createElement('div');r.className='msg-row '+(m.from===me?'sent':'received');r.id='msg-'+m.id;
-            var ct=m.type==='voice'?'<div class="voice-msg"><button class="voice-play-btn" onclick="playV(\''+m.id+'\')">▶</button>🎤 ГС</div>':esc(m.text);
-            if(m.type==='voice')window['aud_'+m.id]=m.audio;
-            var rh='';if(m.reactions&&Object.keys(m.reactions).length>0){rh='<div class="reactions-bar">';var ks=Object.keys(m.reactions);for(var k=0;k<ks.length;k++){var e=ks[k],u=m.reactions[e],a=u.indexOf(me)!==-1;rh+='<span class="reaction-item'+(a?' active':'')+'" onclick="addReaction(\''+m.id+'\',\''+e+'\')">'+e+' '+u.length+'</span>';}rh+='</div>';}
-            var ph='<div class="reaction-picker" id="pk-'+m.id+'">';REAC.forEach(function(e){ph+='<span onclick="addReaction(\''+m.id+'\',\''+e+'\')">'+e+'</span>';});ph+='</div>';
-            r.innerHTML='<div class="msg-bubble" onclick="togPk(\''+m.id+'\')">'+ct+ph+'</div>'+rh;c.appendChild(r);c.scrollTop=c.scrollHeight;
-        }
+        function sendMsg(){if(!cur||!pn)return;var t=document.getElementById('messageInput').value.trim();if(!t)return;var m={id:Date.now().toString(),type:'msg',from:me,to:cur,text:t,t:new Date().toISOString(),reactions:{}};pn.publish({channel:'neonmess',message:m});if(!msgs[cur])msgs[cur]=[];msgs[cur].push(m);save();renderMsgs();document.getElementById('messageInput').value='';document.getElementById('messageInput').focus();}
+        function addReaction(id,em){if(!cur||!pn)return;var ml=msgs[cur];if(!ml)return;var m=null;for(var i=0;i<ml.length;i++){if(ml[i].id===id){m=ml[i];break;}}if(!m)return;if(!m.reactions)m.reactions={};if(!m.reactions[em])m.reactions[em]=[];var idx=m.reactions[em].indexOf(me);if(idx!==-1){m.reactions[em].splice(idx,1);if(m.reactions[em].length===0)delete m.reactions[em];}else m.reactions[em].push(me);m.type='reaction';pn.publish({channel:'neonmess',message:m});save();renderMsgs();document.querySelectorAll('.reaction-picker').forEach(function(p){p.classList.remove('active');});}
+        function addMsgDOM(m){var c=document.getElementById('messagesContainer'),r=document.createElement('div');r.className='msg-row '+(m.from===me?'sent':'received');r.id='msg-'+m.id;var ct=m.type==='voice'?'<div class="voice-msg"><button class="voice-play-btn" onclick="playV(\''+m.id+'\')">▶</button>🎤 ГС</div>':esc(m.text);if(m.type==='voice')window['aud_'+m.id]=m.audio;var rh='';if(m.reactions&&Object.keys(m.reactions).length>0){rh='<div class="reactions-bar">';var ks=Object.keys(m.reactions);for(var k=0;k<ks.length;k++){var e=ks[k],u=m.reactions[e],a=u.indexOf(me)!==-1;rh+='<span class="reaction-item'+(a?' active':'')+'" onclick="addReaction(\''+m.id+'\',\''+e+'\')">'+e+' '+u.length+'</span>';}rh+='</div>';}var ph='<div class="reaction-picker" id="pk-'+m.id+'">';REAC.forEach(function(e){ph+='<span onclick="addReaction(\''+m.id+'\',\''+e+'\')">'+e+'</span>';});ph+='</div>';r.innerHTML='<div class="msg-bubble" onclick="togPk(\''+m.id+'\')">'+ct+ph+'</div>'+rh;c.appendChild(r);c.scrollTop=c.scrollHeight;}
         function playV(id){var d=window['aud_'+id];if(!d)return;new Audio(d).play().catch(function(){});}
         function togPk(id){var p=document.getElementById('pk-'+id);if(p)p.classList.toggle('active');}
         function renderMsgs(){var c=document.getElementById('messagesContainer');c.innerHTML='';var ml=msgs[cur]||[];if(ml.length===0){c.innerHTML='<div class="empty-chat">Нет сообщений</div>';return;}ml.forEach(function(m){addMsgDOM(m);});}
         function openChat(u){cur=u;if(!msgs[cur])msgs[cur]=[];document.getElementById('chatAvatar').textContent=u.charAt(0).toUpperCase();document.getElementById('chatName').textContent=u;document.getElementById('chatStatus').textContent='онлайн';document.getElementById('chatStatus').style.color='var(--online)';document.getElementById('chatArea').classList.add('active');renderMsgs();renderUsers();setTimeout(function(){document.getElementById('messageInput').focus();},200);}
         function closeChat(){cur=null;document.getElementById('chatArea').classList.remove('active');renderUsers();}
-        function renderUsers(){
-            var o=onl.filter(function(u){return u!==me;});var h='';
-            if(o.length===0){h='<div style="padding:20px;color:var(--text2);text-align:center;font-size:12px;">Никого онлайн</div>';}
-            else{o.forEach(function(u){var s=cur===u?' selected':'';var lm=msgs[u]?msgs[u][msgs[u].length-1]:null;var lt=lm?(lm.text?lm.text.substring(0,25):(lm.type==='voice'?'🎤 Голосовое':'')):'';h+='<div class="user-item'+s+'" onclick="openChat(\''+u+'\')"><div class="user-avatar">'+u.charAt(0).toUpperCase()+'</div><div class="user-info"><div class="user-name">'+u+'</div><div class="user-last">'+(lt||'Нет сообщений')+'</div></div><div class="online-dot"></div></div>';});}
-            document.getElementById('usersOnline').innerHTML=h;
-        }
+        function renderUsers(){var o=onl.filter(function(u){return u!==me;});var h='';if(o.length===0){h='<div style="padding:20px;color:var(--text2);text-align:center;font-size:12px;">Никого онлайн</div>';}else{o.forEach(function(u){var s=cur===u?' selected':'';var lm=msgs[u]?msgs[u][msgs[u].length-1]:null;var lt=lm?(lm.text?lm.text.substring(0,25):(lm.type==='voice'?'🎤 Голосовое':'')):'';h+='<div class="user-item'+s+'" onclick="openChat(\''+u+'\')"><div class="user-avatar">'+u.charAt(0).toUpperCase()+'</div><div class="user-info"><div class="user-name">'+u+'</div><div class="user-last">'+(lt||'Нет сообщений')+'</div></div><div class="online-dot"></div></div>';});}document.getElementById('usersOnline').innerHTML=h;}
         function filterUsers(){var q=document.getElementById('searchInput').value.toLowerCase();document.querySelectorAll('.user-item').forEach(function(el){var n=(el.querySelector('.user-name')||{}).textContent||'';el.style.display=n.toLowerCase().indexOf(q)!==-1?'flex':'none';});}
-        function doLogout(){if(ably){ably.close();ably=null;}if(refInt){clearInterval(refInt);refInt=null;}me='';myAva='';cur=null;onl=[];msgs={};document.getElementById('loginScreen').style.display='flex';document.getElementById('app').style.display='none';}
+        function doLogout(){if(pn){pn.unsubscribeAll();pn=null;}if(refInt){clearInterval(refInt);refInt=null;}me='';myAva='';cur=null;onl=[];msgs={};document.getElementById('loginScreen').style.display='flex';document.getElementById('app').style.display='none';}
         function save(){try{var d={};Object.keys(msgs).forEach(function(k){d[k]=msgs[k].slice(-500);});localStorage.setItem('nm_msgs_'+me,JSON.stringify(d));localStorage.setItem('nm_user',me);if(myAva)localStorage.setItem('nm_ava',myAva);}catch(e){}}
         function load(){var s=localStorage.getItem('nm_msgs_'+me);if(s){try{msgs=JSON.parse(s);}catch(e){msgs={};}}}
         function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML;}
