@@ -73,9 +73,9 @@
             -webkit-user-select: none;
             user-select: none;
             transition: background var(--transition), color var(--transition);
+            position: fixed;
         }
 
-        /* ЭКРАН ВХОДА */
         .login-screen {
             height: 100vh;
             width: 100vw;
@@ -86,6 +86,9 @@
             padding: 20px;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
+            position: fixed;
+            top: 0; left: 0;
+            z-index: 100;
         }
 
         .login-card {
@@ -178,21 +181,23 @@
         }
         .error-msg { color: #ef4444; font-size: 13px; margin-top: 8px; display: none; }
 
-        /* ПРИЛОЖЕНИЕ */
         .app {
             height: 100vh;
             width: 100vw;
-            display: block;
+            display: none;
             background: var(--bg);
+            position: fixed;
+            top: 0; left: 0;
         }
 
         @media (min-width: 768px) {
             .app {
-                display: flex;
+                display: none;
                 flex-direction: row;
                 max-width: 1200px;
                 height: 92vh;
                 margin: 4vh auto;
+                position: relative;
                 border-radius: var(--radius);
                 box-shadow: var(--shadow);
                 overflow: hidden;
@@ -209,11 +214,7 @@
         }
 
         @media (min-width: 768px) {
-            .sidebar {
-                width: 340px;
-                min-width: 340px;
-                height: 100%;
-            }
+            .sidebar { width: 340px; min-width: 340px; height: 100%; }
         }
 
         .sidebar-header {
@@ -245,78 +246,51 @@
             flex-shrink: 0;
         }
 
-        .my-avatar img {
-            width: 100%; height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
+        .my-avatar img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
         .my-info { flex: 1; min-width: 0; }
         .my-name { font-weight: 600; font-size: 14px; color: var(--text); }
         .my-status { font-size: 11px; color: var(--text-secondary); }
 
         .theme-btn {
-            background: var(--hover);
-            border: none;
-            color: var(--text);
-            width: 32px; height: 32px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            background: var(--hover); border: none; color: var(--text);
+            width: 32px; height: 32px; border-radius: 50%; cursor: pointer;
+            font-size: 16px; display: flex; align-items: center; justify-content: center;
             flex-shrink: 0;
         }
 
         .logout-btn {
-            background: var(--hover);
-            border: none;
-            color: var(--text-secondary);
-            padding: 5px 10px;
-            border-radius: 14px;
-            font-size: 11px;
-            cursor: pointer;
-            flex-shrink: 0;
+            background: var(--hover); border: none;
+            color: var(--text-secondary); padding: 5px 10px;
+            border-radius: 14px; font-size: 11px; cursor: pointer; flex-shrink: 0;
         }
 
         .search-box {
-            width: 100%;
-            padding: 9px 12px;
-            border: none;
-            border-radius: 20px;
-            background: var(--input-bg);
-            color: var(--text);
-            font-size: 13px;
-            outline: none;
+            width: 100%; padding: 9px 12px; border: none;
+            border-radius: 20px; background: var(--input-bg);
+            color: var(--text); font-size: 13px; outline: none;
             -webkit-appearance: none;
         }
 
         .search-box::placeholder { color: var(--text-secondary); }
         .search-box:focus { background: var(--hover); }
 
-        .users-list {
-            flex: 1;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-        }
+        .users-list { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
 
         .section-title {
-            padding: 8px 14px 4px;
-            font-size: 10px;
-            text-transform: uppercase;
-            color: var(--text-secondary);
-            letter-spacing: 1px;
-            font-weight: 700;
+            padding: 8px 14px 4px; font-size: 10px;
+            text-transform: uppercase; color: var(--text-secondary);
+            letter-spacing: 1px; font-weight: 700;
+        }
+
+        .refresh-btn {
+            background: var(--primary); border: none; color: white;
+            border-radius: 50%; width: 26px; height: 26px; font-size: 14px;
+            cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
         }
 
         .user-item {
-            display: flex;
-            align-items: center;
-            padding: 10px 14px;
-            cursor: pointer;
-            gap: 10px;
-            transition: background var(--transition);
+            display: flex; align-items: center; padding: 10px 14px;
+            cursor: pointer; gap: 10px; transition: background var(--transition);
         }
 
         .user-item:hover { background: var(--hover); }
@@ -324,17 +298,10 @@
         .user-item:active { background: var(--hover); }
 
         .user-avatar {
-            width: 44px; height: 44px;
-            border-radius: 50%;
-            background: var(--primary);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 18px;
-            overflow: hidden;
-            flex-shrink: 0;
+            width: 44px; height: 44px; border-radius: 50%;
+            background: var(--primary); color: white;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; font-size: 18px; overflow: hidden; flex-shrink: 0;
         }
 
         .user-avatar img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
@@ -343,70 +310,40 @@
         .user-last { font-size: 12px; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .online-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--online); flex-shrink: 0; box-shadow: 0 0 6px var(--online); }
 
-        /* ЧАТ */
         .chat-area {
-            display: none;
-            background: var(--bg-chat);
-            height: 100%;
+            display: none; background: var(--bg-chat); height: 100%;
         }
 
         @media (min-width: 768px) {
-            .chat-area {
-                display: flex;
-                flex-direction: column;
-                flex: 1;
-            }
+            .chat-area { display: flex; flex-direction: column; flex: 1; }
         }
 
         @media (max-width: 767px) {
             .chat-area {
-                position: fixed;
-                top: 0; left: 0; right: 0; bottom: 0;
-                z-index: 50;
-                display: none;
-                flex-direction: column;
+                position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+                z-index: 50; display: none; flex-direction: column;
             }
-            .chat-area.active {
-                display: flex;
-            }
+            .chat-area.active { display: flex; }
         }
 
         .chat-header {
-            padding: 10px 14px;
-            background: var(--header-bg);
+            padding: 10px 14px; background: var(--header-bg);
             border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-shrink: 0;
+            display: flex; align-items: center; gap: 10px; flex-shrink: 0;
         }
 
         .back-btn {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-            color: var(--primary);
-            padding: 5px;
+            display: none; background: none; border: none;
+            font-size: 20px; cursor: pointer; color: var(--primary); padding: 5px;
         }
 
-        @media (max-width: 767px) {
-            .back-btn { display: block; }
-        }
+        @media (max-width: 767px) { .back-btn { display: block; } }
 
         .chat-avatar {
-            width: 38px; height: 38px;
-            border-radius: 50%;
-            background: var(--primary);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 16px;
-            overflow: hidden;
-            flex-shrink: 0;
+            width: 38px; height: 38px; border-radius: 50%;
+            background: var(--primary); color: white;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; font-size: 16px; overflow: hidden; flex-shrink: 0;
         }
 
         .chat-avatar img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
@@ -414,9 +351,7 @@
         .chat-status { font-size: 11px; color: var(--text-secondary); }
 
         .messages-container {
-            flex: 1;
-            overflow-y: auto;
-            padding: 12px 14px;
+            flex: 1; overflow-y: auto; padding: 12px 14px;
             -webkit-overflow-scrolling: touch;
         }
 
@@ -424,165 +359,75 @@
         .msg-row.sent { justify-content: flex-end; }
 
         .msg-bubble {
-            max-width: 75%;
-            padding: 8px 14px;
-            border-radius: 18px;
-            word-wrap: break-word;
-            line-height: 1.4;
-            font-size: 14px;
-            position: relative;
-            cursor: pointer;
+            max-width: 75%; padding: 8px 14px; border-radius: 18px;
+            word-wrap: break-word; line-height: 1.4; font-size: 14px;
+            position: relative; cursor: pointer;
         }
 
-        .msg-row.sent .msg-bubble {
-            background: var(--bubble-sent);
-            color: white;
-            border-bottom-right-radius: 4px;
-        }
+        .msg-row.sent .msg-bubble { background: var(--bubble-sent); color: white; border-bottom-right-radius: 4px; }
+        .msg-row.received .msg-bubble { background: var(--bubble-received); color: var(--text); border-bottom-left-radius: 4px; box-shadow: var(--bubble-received-shadow); }
 
-        .msg-row.received .msg-bubble {
-            background: var(--bubble-received);
-            color: var(--text);
-            border-bottom-left-radius: 4px;
-            box-shadow: var(--bubble-received-shadow);
-        }
-
-        /* Реакции */
-        .reactions-bar {
-            display: flex; gap: 4px; flex-wrap: wrap; margin-top: 2px; padding: 0 6px;
-        }
-
+        .reactions-bar { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 2px; padding: 0 6px; }
         .reaction-item {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 2px 6px;
-            font-size: 13px;
-            cursor: pointer;
+            background: var(--bg-secondary); border: 1px solid var(--border);
+            border-radius: 12px; padding: 2px 6px; font-size: 13px; cursor: pointer;
         }
-
         .reaction-item:hover { background: var(--hover); }
         .reaction-item.active { background: var(--primary); color: white; border-color: var(--primary); }
 
         .reaction-picker {
-            display: none;
-            position: absolute;
-            bottom: -44px;
-            left: 0;
-            background: var(--bg-secondary);
-            border-radius: 20px;
-            box-shadow: var(--shadow);
-            padding: 6px 10px;
-            gap: 4px;
-            z-index: 60;
-            border: 1px solid var(--border);
-            white-space: nowrap;
+            display: none; position: absolute; bottom: -44px; left: 0;
+            background: var(--bg-secondary); border-radius: 20px;
+            box-shadow: var(--shadow); padding: 6px 10px; gap: 4px;
+            z-index: 60; border: 1px solid var(--border); white-space: nowrap;
         }
-
         .reaction-picker.active { display: flex; }
-
-        .reaction-picker span {
-            font-size: 20px;
-            cursor: pointer;
-            padding: 4px;
-            transition: transform var(--transition);
-        }
-
+        .reaction-picker span { font-size: 20px; cursor: pointer; padding: 4px; transition: transform var(--transition); }
         .reaction-picker span:hover { transform: scale(1.3); }
 
         .input-area {
-            padding: 10px 12px;
-            background: var(--header-bg);
-            border-top: 1px solid var(--border);
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            flex-shrink: 0;
+            padding: 10px 12px; background: var(--header-bg);
+            border-top: 1px solid var(--border); display: flex;
+            gap: 8px; align-items: center; flex-shrink: 0;
             padding-bottom: max(10px, env(safe-area-inset-bottom));
         }
 
         .msg-input {
-            flex: 1;
-            padding: 10px 14px;
-            border: none;
-            border-radius: 20px;
-            font-size: 14px;
-            font-family: inherit;
-            background: var(--input-bg);
-            color: var(--text);
-            outline: none;
+            flex: 1; padding: 10px 14px; border: none;
+            border-radius: 20px; font-size: 14px; font-family: inherit;
+            background: var(--input-bg); color: var(--text); outline: none;
             -webkit-appearance: none;
         }
-
         .msg-input:focus { background: var(--hover); }
 
         .send-btn {
-            width: 38px; height: 38px;
-            border-radius: 50%;
-            background: var(--primary);
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-            flex-shrink: 0;
+            width: 38px; height: 38px; border-radius: 50%;
+            background: var(--primary); color: white; border: none;
+            cursor: pointer; font-size: 16px; flex-shrink: 0;
         }
-
         .send-btn:active { transform: scale(0.9); }
 
         .empty-chat {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            color: var(--text-secondary);
-            text-align: center;
+            display: flex; flex-direction: column; align-items: center;
+            justify-content: center; height: 100%; color: var(--text-secondary); text-align: center;
         }
-
         .empty-chat .icon { font-size: 50px; margin-bottom: 10px; opacity: 0.5; }
 
         .theme-menu {
-            display: none;
-            position: absolute;
-            top: 50px;
-            right: 10px;
-            background: var(--bg-secondary);
-            border-radius: var(--radius-sm);
-            box-shadow: var(--shadow);
-            z-index: 200;
-            overflow: hidden;
-            border: 1px solid var(--border);
+            display: none; position: absolute; top: 50px; right: 10px;
+            background: var(--bg-secondary); border-radius: var(--radius-sm);
+            box-shadow: var(--shadow); z-index: 200; overflow: hidden; border: 1px solid var(--border);
         }
-
         .theme-menu.active { display: block; }
-
-        .theme-menu div {
-            padding: 10px 16px;
-            cursor: pointer;
-            font-size: 13px;
-            color: var(--text);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
+        .theme-menu div { padding: 10px 16px; cursor: pointer; font-size: 13px; color: var(--text); display: flex; align-items: center; gap: 8px; }
         .theme-menu div:hover { background: var(--hover); }
 
         .toast {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--bg-secondary);
-            color: var(--text);
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-size: 13px;
-            z-index: 999;
-            box-shadow: var(--shadow);
-            animation: fadeIn 0.3s;
-            white-space: nowrap;
-            border: 1px solid var(--border);
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            background: var(--bg-secondary); color: var(--text); padding: 10px 20px;
+            border-radius: 20px; font-size: 13px; z-index: 999;
+            box-shadow: var(--shadow); animation: fadeIn 0.3s; white-space: nowrap;
+            border: 1px solid var(--border); pointer-events: none;
         }
 
         @keyframes fadeIn {
@@ -593,7 +438,6 @@
 </head>
 <body>
 
-    <!-- ЭКРАН ВХОДА -->
     <div class="login-screen" id="loginScreen">
         <div class="login-card">
             <svg class="logo-img" viewBox="0 0 200 200">
@@ -614,8 +458,7 @@
             <p>Яркое общение с друзьями</p>
             
             <div class="avatar-pick" id="loginAvatar" onclick="document.getElementById('avatarFile').click()">
-                👤
-                <div class="overlay">Аватар</div>
+                👤<div class="overlay">Аватар</div>
             </div>
             <input type="file" id="avatarFile" accept="image/*" style="display:none" onchange="pickAvatar(event)">
             
@@ -623,7 +466,6 @@
                 <label>Твой никнейм</label>
                 <input type="text" id="nicknameInput" placeholder="Придумай ник" maxlength="15" autocomplete="off">
             </div>
-
             <div class="input-group">
                 <label>Пароль</label>
                 <input type="password" id="passwordInput" placeholder="Придумай пароль" maxlength="20" autocomplete="off">
@@ -635,8 +477,7 @@
         </div>
     </div>
 
-    <!-- ПРИЛОЖЕНИЕ -->
-    <div class="app" id="app" style="display:none;">
+    <div class="app" id="app">
         <div class="sidebar">
             <div class="sidebar-header">
                 <div class="profile-row">
@@ -657,7 +498,10 @@
                 <input type="text" class="search-box" placeholder="🔍 Поиск..." id="searchInput" oninput="filterUsers()">
             </div>
             <div class="users-list">
-                <div class="section-title">Пользователи онлайн</div>
+                <div class="section-title" style="display:flex;justify-content:space-between;align-items:center;">
+                    <span>Пользователи онлайн</span>
+                    <button class="refresh-btn" onclick="refreshUsers()" title="Обновить список">↻</button>
+                </div>
                 <div id="usersOnline"></div>
             </div>
         </div>
@@ -682,21 +526,21 @@
     </div>
 
     <script>
-        const PUBNUB_PUBLISH_KEY = "pub-c-77f45bee-e255-dd33-b960-0a4d35278122";
-        const PUBNUB_SUBSCRIBE_KEY = "sub-c-855bc2ca-10dd-4d48-aa40-ea5c376523f2";
+        var PUBNUB_PUBLISH_KEY = "pub-c-77f45bee-e255-dd33-b960-0a4d35278122";
+        var PUBNUB_SUBSCRIBE_KEY = "sub-c-855bc2ca-10dd-4d48-aa40-ea5c376523f2";
 
-        let pubnub;
-        let myUsername = '';
-        let myAvatar = '';
-        let myPassword = '';
-        let currentChat = null;
-        let onlineUsers = [];
-        let allMessages = {};
-        let tempAvatar = '';
-        let isLoginMode = true;
+        var pubnub;
+        var myUsername = '';
+        var myAvatar = '';
+        var currentChat = null;
+        var onlineUsers = [];
+        var allMessages = {};
+        var tempAvatar = '';
+        var isLoginMode = true;
+        var refreshInterval = null;
 
-        const COLORS = ['#667eea','#9b59b6','#00ff88','#ff6b6b','#4facfe','#f093fb','#43e97b','#fa709a'];
-        const REACTIONS = ['❤️','🔥','😂','😢','😮','👏'];
+        var COLORS = ['#667eea','#9b59b6','#00ff88','#ff6b6b','#4facfe','#f093fb','#43e97b','#fa709a'];
+        var REACTIONS = ['❤️','🔥','😂','😢','😮','👏'];
 
         function setTheme(theme) {
             document.documentElement.setAttribute('data-theme', theme);
@@ -749,32 +593,17 @@
             var nick = document.getElementById('nicknameInput').value.trim();
             var pass = document.getElementById('passwordInput').value.trim();
 
-            if (!nick || nick.length < 2) {
-                showError('Никнейм должен быть не менее 2 символов');
-                return;
-            }
-            if (!pass || pass.length < 3) {
-                showError('Пароль должен быть не менее 3 символов');
-                return;
-            }
+            if (!nick || nick.length < 2) { showError('Никнейм минимум 2 символа'); return; }
+            if (!pass || pass.length < 3) { showError('Пароль минимум 3 символа'); return; }
 
             if (isLoginMode) {
                 var existingPass = localStorage.getItem('neonmess_pass_'+nick);
-                if (existingPass) {
-                    showError('Этот никнейм уже занят!');
-                    return;
-                }
+                if (existingPass) { showError('Этот ник занят!'); return; }
                 localStorage.setItem('neonmess_pass_'+nick, pass);
             } else {
                 var savedPass = localStorage.getItem('neonmess_pass_'+nick);
-                if (!savedPass) {
-                    showError('Аккаунт не найден');
-                    return;
-                }
-                if (savedPass !== pass) {
-                    showError('Неверный пароль');
-                    return;
-                }
+                if (!savedPass) { showError('Аккаунт не найден'); return; }
+                if (savedPass !== pass) { showError('Неверный пароль'); return; }
             }
 
             myUsername = nick;
@@ -785,9 +614,7 @@
             app.style.display = 'block';
             if (window.innerWidth >= 768) app.style.display = 'flex';
 
-            document.getElementById('myAvatarSmall').innerHTML = myAvatar
-                ? '<img src="'+myAvatar+'">'
-                : myUsername.charAt(0).toUpperCase();
+            document.getElementById('myAvatarSmall').innerHTML = myAvatar ? '<img src="'+myAvatar+'">' : myUsername.charAt(0).toUpperCase();
             document.getElementById('myNameDisplay').textContent = myUsername;
 
             loadFromStorage();
@@ -804,8 +631,19 @@
             setTimeout(function(){ el.style.display = 'none'; }, 3000);
         }
 
+        function showToast(msg) {
+            var old = document.querySelector('.toast');
+            if (old) old.remove();
+            var t = document.createElement('div');
+            t.className = 'toast';
+            t.textContent = msg;
+            document.body.appendChild(t);
+            setTimeout(function(){ t.remove(); }, 2500);
+        }
+
         function initPubNub() {
             if (pubnub) { pubnub.unsubscribeAll(); }
+            
             pubnub = new PubNub({
                 publishKey: PUBNUB_PUBLISH_KEY,
                 subscribeKey: PUBNUB_SUBSCRIBE_KEY,
@@ -815,6 +653,24 @@
             pubnub.addListener({
                 message: function(event) {
                     var msg = event.message;
+                    
+                    if (msg.type === 'neonmess_join') {
+                        if (msg.user !== myUsername && onlineUsers.indexOf(msg.user) === -1) {
+                            onlineUsers.push(msg.user);
+                            renderUserList();
+                            showToast('👋 ' + msg.user + ' онлайн!');
+                        }
+                        return;
+                    }
+                    
+                    if (msg.type === 'neonmess_who') {
+                        pubnub.publish({
+                            channel: 'neonmess-main',
+                            message: { type: 'neonmess_join', user: myUsername }
+                        });
+                        return;
+                    }
+                    
                     if (msg.type === 'msg' || msg.type === 'reaction') {
                         if (!allMessages[msg.channel]) allMessages[msg.channel] = [];
                         var existing = -1;
@@ -844,11 +700,44 @@
                 }
             });
 
-            pubnub.subscribe({ channels: ['neonmess-main'] });
-            pubnub.publish({
-                channel: 'neonmess-main',
-                message: { type: 'presence', user: myUsername, action: 'join' }
-            });
+            pubnub.subscribe({ channels: ['neonmess-main'], withPresence: true });
+
+            // Объявляем о себе
+            setTimeout(function() {
+                pubnub.publish({
+                    channel: 'neonmess-main',
+                    message: { type: 'neonmess_join', user: myUsername }
+                });
+            }, 500);
+
+            // Запрашиваем кто онлайн
+            setTimeout(function() {
+                pubnub.publish({
+                    channel: 'neonmess-main',
+                    message: { type: 'neonmess_who' }
+                });
+            }, 1500);
+
+            // Автообновление каждые 10 секунд
+            if (refreshInterval) clearInterval(refreshInterval);
+            refreshInterval = setInterval(function() {
+                pubnub.publish({
+                    channel: 'neonmess-main',
+                    message: { type: 'neonmess_who' }
+                });
+            }, 10000);
+        }
+
+        function refreshUsers() {
+            onlineUsers = [];
+            renderUserList();
+            if (pubnub) {
+                pubnub.publish({
+                    channel: 'neonmess-main',
+                    message: { type: 'neonmess_who' }
+                });
+            }
+            showToast('🔄 Обновляю список...');
         }
 
         function sendMsg() {
@@ -932,7 +821,6 @@
             pickerHTML += '</div>';
 
             row.innerHTML = '<div class="msg-bubble" onclick="toggleReactionPicker(\''+msg.id+'\')" oncontextmenu="event.preventDefault();toggleReactionPicker(\''+msg.id+'\')">'+escHtml(msg.text)+pickerHTML+'</div>'+reactionsHTML;
-
             container.appendChild(row);
             container.scrollTop = container.scrollHeight;
         }
@@ -964,7 +852,7 @@
             if (!allMessages[currentChat]) allMessages[currentChat] = [];
             document.getElementById('chatAvatar').textContent = username.charAt(0).toUpperCase();
             document.getElementById('chatAvatar').style.background = getColor(username);
-            document.getElementById('chatName').textContent = username;
+            document.getElementById('chatName').textContent = '💬 ' + username;
             document.getElementById('chatStatus').textContent = 'онлайн';
             document.getElementById('chatStatus').style.color = 'var(--online)';
             document.getElementById('chatArea').classList.add('active');
@@ -1018,6 +906,7 @@
 
         function logout() {
             if (pubnub) { pubnub.unsubscribeAll(); pubnub = null; }
+            if (refreshInterval) { clearInterval(refreshInterval); refreshInterval = null; }
             myUsername = ''; myAvatar = ''; currentChat = null;
             onlineUsers = []; allMessages = {};
             document.getElementById('loginScreen').style.display = 'flex';
