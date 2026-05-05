@@ -14,8 +14,7 @@
             --header: #111a11; --border: #2a3a2a;
             --online: #5aeb5a; --accent: #3adb3a; --accent2: #2a8a2a;
             --input: #152015; --hover: rgba(58,219,58,0.05);
-            --shadow: 0 0 20px rgba(58,219,58,0.08);
-            --snow: block;
+            --shadow: 0 0 20px rgba(58,219,58,0.08); --snow: block;
         }
         [data-theme="dark"] { --bg:#0a0a0a;--bg2:#111;--chat-bg:#0a0a0a;--text:#ddd;--text2:#999;--bubble-sent:#222;--bubble-rec:#181818;--header:#111;--border:#333;--online:#4ade80;--accent:#667eea;--accent2:#764ba2;--input:#181818;--hover:rgba(255,255,255,0.03);--shadow:0 0 20px rgba(0,0,0,0.3);--snow:none; }
         [data-theme="neon"] { --bg:#000;--bg2:#0a0a0a;--chat-bg:#000;--text:#0f0;--text2:#0a0;--bubble-sent:#003300;--bubble-rec:#001a00;--header:#0a0a0a;--border:#333;--online:#0f0;--accent:#0f0;--accent2:#0a0;--input:#001a00;--hover:rgba(0,255,0,0.05);--shadow:0 0 30px rgba(0,255,0,0.15);--snow:none; }
@@ -25,16 +24,14 @@
         [data-theme="cyberpunk"] { --bg:#0a0a00;--bg2:#1a1a00;--chat-bg:#0a0a00;--text:#ffff00;--text2:#aaaa00;--bubble-sent:#2a2a00;--bubble-rec:#1a1a00;--header:#1a1a00;--border:#3a3a00;--online:#ffff00;--accent:#ffcc00;--accent2:#cc9900;--input:#1a1a00;--hover:rgba(255,204,0,0.05);--shadow:0 0 30px rgba(255,204,0,0.1);--snow:none; }
         [data-theme="minecraft"] { --bg:#1a0e00;--bg2:#2d1a00;--chat-bg:#1a0e00;--text:#c8b896;--text2:#8b7a5e;--bubble-sent:#3d2a10;--bubble-rec:#2d1a00;--header:#2d1a00;--border:#4a3520;--online:#5a9e3d;--accent:#8b6b3d;--accent2:#5c3c1a;--input:#2d1a00;--hover:rgba(139,122,94,0.1);--shadow:0 0 20px rgba(0,0,0,0.4);--snow:block; }
         [data-theme="pink"] { --bg:#1a0010;--bg2:#2d0018;--chat-bg:#1a0010;--text:#ffc0e0;--text2:#d080a0;--bubble-sent:#4d0028;--bubble-rec:#2d0018;--header:#2d0018;--border:#600040;--online:#ff4088;--accent:#ff2080;--accent2:#cc0060;--input:#2d0018;--hover:rgba(255,32,128,0.05);--shadow:0 0 30px rgba(255,32,128,0.1);--snow:none; }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); height: 100vh; width: 100vw; overflow: hidden; -webkit-tap-highlight-color: transparent; user-select: none; position: fixed; }
-        .snow-container { display: var(--snow); position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
-        .snowflake { position: absolute; top: -10px; color: rgba(255,255,255,0.3); font-size: 14px; animation: fall linear infinite; }
+        * { margin:0;padding:0;box-sizing:border-box; }
+        body { font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text);height:100vh;width:100vw;overflow:hidden;-webkit-tap-highlight-color:transparent;user-select:none;position:fixed; }
+        .snow-container { display:var(--snow);position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0; }
+        .snowflake { position:absolute;top:-10px;color:rgba(255,255,255,0.3);font-size:14px;animation:fall linear infinite; }
         @keyframes fall { 0%{transform:translateY(-10px)rotate(0deg);opacity:0.6} 100%{transform:translateY(105vh)rotate(360deg);opacity:0} }
         .login-screen { height:100vh;width:100vw;display:flex;align-items:center;justify-content:center;background:var(--bg);padding:20px;position:fixed;top:0;left:0;z-index:100; }
         .login-card { background:var(--bg2);border-radius:20px;padding:30px 24px;width:100%;max-width:380px;box-shadow:var(--shadow);text-align:center;border:1px solid var(--border); }
         .login-card h1 { font-size:28px;color:var(--accent);margin-bottom:4px; }
-        .login-card p { color:var(--text2);font-size:13px;margin-bottom:20px; }
         .avatar-pick { width:70px;height:70px;border-radius:50%;background:var(--bg);color:var(--accent);display:inline-flex;align-items:center;justify-content:center;font-size:30px;cursor:pointer;margin-bottom:14px;overflow:hidden;border:2px solid var(--accent); }
         .avatar-pick img { width:100%;height:100%;border-radius:50%;object-fit:cover; }
         .input-group { margin-bottom:12px;text-align:left; }
@@ -42,7 +39,6 @@
         .input-group input { width:100%;padding:12px;border:1px solid var(--border);border-radius:10px;font-size:14px;background:var(--input);color:var(--text);outline:none;-webkit-appearance:none; }
         .input-group input:focus { border-color:var(--accent); }
         .btn { width:100%;padding:13px;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;background:var(--accent);color:#000;margin-top:6px;-webkit-appearance:none; }
-        .btn:active { transform:scale(0.97); }
         .btn-outline { width:100%;padding:11px;border:1px solid var(--accent);border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;background:transparent;color:var(--accent);margin-top:6px;-webkit-appearance:none; }
         .error-msg { color:#ff4444;font-size:12px;margin-top:8px;display:none; }
         .app { height:100vh;width:100vw;display:none;position:fixed;top:0;left:0; }
@@ -56,7 +52,6 @@
         .my-info { flex:1;min-width:0; }
         .my-name { font-weight:600;font-size:13px;color:var(--text); }
         .my-status { font-size:10px;color:var(--accent); }
-        .header-btns { display:flex;gap:4px; }
         .icon-btn { background:var(--hover);border:none;color:var(--text);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center; }
         .logout-btn { background:var(--hover);border:none;color:var(--text2);padding:4px 8px;border-radius:12px;font-size:10px;cursor:pointer; }
         .search-box { width:100%;padding:8px 12px;border:none;border-radius:16px;background:var(--input);color:var(--text);font-size:12px;outline:none; }
@@ -117,19 +112,15 @@
         .voice-btn.recording { background:#ff3333;color:white;animation:pulse 0.8s infinite; }
         @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
         .send-btn { width:34px;height:34px;border-radius:50%;background:var(--accent);color:#000;border:none;cursor:pointer;font-size:14px;flex-shrink:0; }
-        .empty-chat { display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--text2);text-align:center;font-size:13px; }
         .toast { position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:var(--bg2);color:var(--text);padding:8px 16px;border-radius:16px;font-size:12px;z-index:999;border:1px solid var(--border);animation:fadeIn 0.3s;pointer-events:none; }
         @keyframes fadeIn { from{opacity:0;transform:translateX(-50%) translateY(10px)} to{opacity:1;transform:translateX(-50%) translateY(0)} }
     </style>
 </head>
 <body>
-
     <div class="snow-container" id="snowContainer"></div>
-
     <div class="login-screen" id="loginScreen">
         <div class="login-card">
-            <h1>⚡ NeonMess</h1>
-            <p>Яркое общение</p>
+            <h1>⚡ NeonMess</h1><p>Яркое общение</p>
             <div class="avatar-pick" id="loginAvatar" onclick="document.getElementById('avatarFile').click()">👤</div>
             <input type="file" id="avatarFile" accept="image/*" style="display:none" onchange="pickAvatar(event)">
             <div class="input-group"><label>Логин</label><input type="text" id="loginInput" placeholder="me" maxlength="15" autocomplete="off"></div>
@@ -139,7 +130,6 @@
             <div class="error-msg" id="loginError"></div>
         </div>
     </div>
-
     <div class="app" id="app">
         <div class="sidebar">
             <div class="sidebar-header">
@@ -152,36 +142,17 @@
                     <button class="logout-btn" onclick="doLogout()">Выйти</button>
                 </div>
                 <div class="theme-menu" id="themeMenu">
-                    <div onclick="setTheme('')">🟢 Стандарт</div>
-                    <div onclick="setTheme('dark')">🌙 Тёмная</div>
-                    <div onclick="setTheme('neon')">💚 Неон</div>
-                    <div onclick="setTheme('purple')">💜 Фиолет</div>
-                    <div onclick="setTheme('sunset')">🌅 Закат</div>
-                    <div onclick="setTheme('ocean')">🌊 Океан</div>
-                    <div onclick="setTheme('cyberpunk')">💛 Киберпанк</div>
-                    <div onclick="setTheme('minecraft')">⛏️ Minecraft</div>
-                    <div onclick="setTheme('pink')">💗 Розовый</div>
+                    <div onclick="setTheme('')">🟢 Стандарт</div><div onclick="setTheme('dark')">🌙 Тёмная</div><div onclick="setTheme('neon')">💚 Неон</div><div onclick="setTheme('purple')">💜 Фиолет</div><div onclick="setTheme('sunset')">🌅 Закат</div><div onclick="setTheme('ocean')">🌊 Океан</div><div onclick="setTheme('cyberpunk')">💛 Киберпанк</div><div onclick="setTheme('minecraft')">⛏️ Minecraft</div><div onclick="setTheme('pink')">💗 Розовый</div>
                 </div>
                 <input type="text" class="search-box" placeholder="🔍 Поиск..." id="searchInput" oninput="filterUsers()">
             </div>
-            <div class="stories-bar" id="storiesBar">
-                <div class="story-item" onclick="document.getElementById('storyInput').click()"><div class="story-ring"><div class="story-ring-inner" style="font-size:22px;color:var(--accent)">+</div></div><div class="story-name">Моя</div></div>
-            </div>
-            <div class="users-list">
-                <div class="section-title"><span>Контакты</span><button class="refresh-btn" onclick="refreshUsers()">↻</button></div>
-                <div id="usersOnline"></div>
-            </div>
+            <div class="stories-bar" id="storiesBar"><div class="story-item" onclick="document.getElementById('storyInput').click()"><div class="story-ring"><div class="story-ring-inner" style="font-size:22px;color:var(--accent)">+</div></div><div class="story-name">Моя</div></div></div>
+            <div class="users-list"><div class="section-title"><span>Контакты</span><button class="refresh-btn" onclick="refreshUsers()">↻</button></div><div id="usersOnline"></div></div>
         </div>
-
         <div class="story-viewer" id="storyViewer"><button class="story-close" onclick="closeStory()">✕</button><img id="storyImage" src="" alt=""></div>
-
         <div class="chat-area" id="chatArea">
-            <div class="chat-header">
-                <button class="back-btn" onclick="closeChat()">←</button>
-                <div class="chat-avatar" id="chatAvatar">💬</div>
-                <div><div class="chat-name" id="chatName">Выбери контакт</div><div class="chat-status" id="chatStatus"></div></div>
-            </div>
-            <div class="messages-container" id="messagesContainer"><div class="empty-chat">Выбери контакт для общения</div></div>
+            <div class="chat-header"><button class="back-btn" onclick="closeChat()">←</button><div class="chat-avatar" id="chatAvatar">💬</div><div><div class="chat-name" id="chatName">Выбери контакт</div><div class="chat-status" id="chatStatus"></div></div></div>
+            <div class="messages-container" id="messagesContainer"><div class="empty-chat">Выбери контакт</div></div>
             <div class="input-area">
                 <input type="text" class="msg-input" id="messageInput" placeholder="Сообщение..." onkeypress="if(event.key==='Enter'){sendMsg();}" autocomplete="off">
                 <button class="voice-btn" id="voiceBtn" onclick="toggleVoice()">🎤</button>
@@ -189,160 +160,137 @@
             </div>
         </div>
     </div>
-
     <script>
-        var PUB = "pub-c-655d51c3-fd54-4c43-9471-d97d1cdac46d";
-        var SUB = "sub-c-1e441f81-82f3-41be-a35f-16661ae18aee";
+        var PUB="pub-c-655d51c3-fd54-4c43-9471-d97d1cdac46d",SUB="sub-c-1e441f81-82f3-41be-a35f-16661ae18aee";
+        var pn,me='',myAva='',cur='',onl=[],msgs={},tmpAva='',reg=true,refInt,stories={},mr,ach=[],rec=false;
+        var REAC=['❤️','🔥','😂','😢','😮','👏'],COLS=['#3adb3a','#5aeb5a','#2a8a2a','#6fcf6f','#4ae54a','#8fbc8f'];
 
-        var pn, me='', myAva='', cur='', onl=[], msgs={}, tmpAva='', reg=true, refInt;
-        var stories={}, mr, ach=[], rec=false;
-        var REAC=['❤️','🔥','😂','😢','😮','👏'];
-        var COLS=['#3adb3a','#5aeb5a','#2a8a2a','#6fcf6f','#4ae54a','#8fbc8f'];
-
-        function snow(){ var c=document.getElementById('snowContainer'); c.innerHTML=''; for(var i=0;i<25;i++){ var f=document.createElement('div'); f.className='snowflake'; f.textContent=['❄','❅','✦','•'][Math.floor(Math.random()*4)]; f.style.left=Math.random()*100+'%'; f.style.fontSize=(Math.random()*10+8)+'px'; f.style.animationDuration=(Math.random()*6+4)+'s'; f.style.animationDelay=Math.random()*4+'s'; c.appendChild(f); } }
+        function snow(){ var c=document.getElementById('snowContainer');c.innerHTML='';for(var i=0;i<25;i++){var f=document.createElement('div');f.className='snowflake';f.textContent=['❄','❅','✦','•'][Math.floor(Math.random()*4)];f.style.left=Math.random()*100+'%';f.style.fontSize=(Math.random()*10+8)+'px';f.style.animationDuration=(Math.random()*6+4)+'s';f.style.animationDelay=Math.random()*4+'s';c.appendChild(f);}}
         snow();
+        function setTheme(t){document.documentElement.setAttribute('data-theme',t);localStorage.setItem('nm_theme',t);document.getElementById('themeMenu').classList.remove('active');if(t===''||t==='minecraft') snow();}
+        setTheme(localStorage.getItem('nm_theme')||'');
+        document.addEventListener('click',function(e){if(!e.target.closest('#themeBtn')&&!e.target.closest('#themeMenu'))document.getElementById('themeMenu').classList.remove('active');});
+        document.getElementById('themeBtn').addEventListener('click',function(e){e.stopPropagation();document.getElementById('themeMenu').classList.toggle('active');});
 
-        function setTheme(t){ document.documentElement.setAttribute('data-theme',t); localStorage.setItem('nm_theme',t); document.getElementById('themeMenu').classList.remove('active'); if(t===''||t==='minecraft') snow(); }
-        var st=localStorage.getItem('nm_theme')||''; setTheme(st);
-
-        document.addEventListener('click',function(e){ if(!e.target.closest('#themeBtn')&&!e.target.closest('#themeMenu')) document.getElementById('themeMenu').classList.remove('active'); });
-        document.getElementById('themeBtn').addEventListener('click',function(e){ e.stopPropagation(); document.getElementById('themeMenu').classList.toggle('active'); });
-
-        function pickAvatar(e){ var f=e.target.files[0]; if(!f)return; var r=new FileReader(); r.onload=function(ev){ var i=new Image(); i.onload=function(){ var c=document.createElement('canvas'); var m=150,w=i.width,h=i.height; if(w>h){if(w>m){h*=m/w;w=m;}}else{if(h>m){w*=m/h;h=m;}} c.width=w;c.height=h;c.getContext('2d').drawImage(i,0,0,w,h); tmpAva=c.toDataURL('image/jpeg',0.5); document.getElementById('loginAvatar').innerHTML='<img src="'+tmpAva+'">'; }; i.src=ev.target.result; }; r.readAsDataURL(f); }
-
-        function toggleMode(){ reg=!reg; document.querySelector('.btn-outline').textContent=reg?'📝 Создать аккаунт':'🔑 Уже есть аккаунт'; }
-
-        function hash(s){ return CryptoJS.SHA256(s).toString(); }
+        function pickAvatar(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(ev){var i=new Image();i.onload=function(){var c=document.createElement('canvas');c.width=c.height=150;c.getContext('2d').drawImage(i,0,0,150,150);tmpAva=c.toDataURL('image/jpeg',0.4);document.getElementById('loginAvatar').innerHTML='<img src="'+tmpAva+'">';};i.src=ev.target.result;};r.readAsDataURL(f);}
+        function toggleMode(){reg=!reg;document.querySelector('.btn-outline').textContent=reg?'📝 Создать аккаунт':'🔑 Уже есть аккаунт';}
+        function hash(s){return CryptoJS.SHA256(s).toString();}
 
         function doLogin(){
-            var l=document.getElementById('loginInput').value.trim();
-            var p=document.getElementById('passInput').value.trim();
-            if(!l||l.length<2){ err('Логин минимум 2 символа'); return; }
-            if(!p||p.length<3){ err('Пароль минимум 3 символа'); return; }
-            var hp=hash(p);
-            var sp=localStorage.getItem('nm_'+l);
-            if(reg){ if(sp){ err('Логин занят!'); return; } localStorage.setItem('nm_'+l,hp); }
-            else { if(!sp){ err('Аккаунт не найден'); return; } if(sp!==hp){ err('Неверный пароль'); return; } }
-            me=l; myAva=tmpAva;
-            document.getElementById('loginScreen').style.display='none';
-            var app=document.getElementById('app'); app.style.display='block'; if(window.innerWidth>=768) app.style.display='flex';
+            var l=document.getElementById('loginInput').value.trim(),p=document.getElementById('passInput').value.trim();
+            if(!l||l.length<2){err('Логин минимум 2 символа');return;}if(!p||p.length<3){err('Пароль минимум 3 символа');return;}
+            var hp=hash(p),sp=localStorage.getItem('nm_'+l);
+            if(reg){if(sp){err('Логин занят!');return;}localStorage.setItem('nm_'+l,hp);}
+            else{if(!sp){err('Аккаунт не найден');return;}if(sp!==hp){err('Неверный пароль');return;}}
+            me=l;myAva=tmpAva;document.getElementById('loginScreen').style.display='none';
+            var app=document.getElementById('app');app.style.display='block';if(window.innerWidth>=768)app.style.display='flex';
             document.getElementById('myAvatarSmall').innerHTML=myAva?'<img src="'+myAva+'">':me.charAt(0).toUpperCase();
-            document.getElementById('myNameDisplay').textContent=me;
-            load(); initPN(); renderStories();
-            localStorage.setItem('nm_user',me); if(myAva) localStorage.setItem('nm_ava',myAva);
+            document.getElementById('myNameDisplay').textContent=me;load();initPN();renderStories();
+            localStorage.setItem('nm_user',me);if(myAva)localStorage.setItem('nm_ava',myAva);
         }
-        function err(m){ var e=document.getElementById('loginError'); e.textContent=m; e.style.display='block'; setTimeout(function(){e.style.display='none';},3000); }
-        function toast(m){ var o=document.querySelector('.toast'); if(o) o.remove(); var t=document.createElement('div'); t.className='toast'; t.textContent=m; document.body.appendChild(t); setTimeout(function(){t.remove();},2000); }
+        function err(m){var e=document.getElementById('loginError');e.textContent=m;e.style.display='block';setTimeout(function(){e.style.display='none';},3000);}
+        function toast(m){var o=document.querySelector('.toast');if(o)o.remove();var t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(function(){t.remove();},2000);}
 
         function initPN(){
             if(pn){pn.unsubscribeAll();}
             pn=new PubNub({publishKey:PUB,subscribeKey:SUB,uuid:me});
             pn.addListener({message:function(e){
                 var m=e.message;
-                if(m.type==='on'){ if(m.u!==me&&onl.indexOf(m.u)===-1){onl.push(m.u);renderUsers();toast('👋 '+m.u+' в сети');} return; }
-                if(m.type==='who'){ pn.publish({channel:'nm-main',message:{type:'on',u:me}}); return; }
-                if(m.type==='story'){ if(!stories[m.u]) stories[m.u]=[]; stories[m.u].push({img:m.img,t:Date.now()}); renderStories(); return; }
+                if(m.type==='on'){if(m.u!==me&&onl.indexOf(m.u)===-1){onl.push(m.u);renderUsers();toast('👋 '+m.u+' в сети');}return;}
+                if(m.type==='who'){pn.publish({channel:'nm-main',message:{type:'on',u:me}});return;}
+                if(m.type==='story'){if(!stories[m.u])stories[m.u]=[];stories[m.u].push({img:m.img,t:Date.now()});renderStories();return;}
                 if(m.type==='msg'||m.type==='voice'||m.type==='reaction'){
-                    var ch=m.ch;
-                    if(!ch) return;
-                    if(!msgs[ch]) msgs[ch]=[];
-                    var ex=-1; for(var i=0;i<msgs[ch].length;i++){if(msgs[ch][i].id===m.id){ex=i;break;}}
-                    if(ex!==-1) msgs[ch][ex]=m; else msgs[ch].push(m);
-                    save(); if(cur===ch||cur===m.from) renderMsgs(); renderUsers();
+                    var ch=m.ch;if(!ch)return;if(!msgs[ch])msgs[ch]=[];
+                    var ex=-1;for(var i=0;i<msgs[ch].length;i++){if(msgs[ch][i].id===m.id){ex=i;break;}}
+                    if(ex!==-1)msgs[ch][ex]=m;else msgs[ch].push(m);
+                    save();if(cur===ch||cur===m.from)renderMsgs();renderUsers();
                 }
             }});
             pn.subscribe({channels:['nm-main',me]});
-            setTimeout(function(){pn.publish({channel:'nm-main',message:{type:'on',u:me}});},500);
-            setTimeout(function(){pn.publish({channel:'nm-main',message:{type:'who'}});},1000);
-            if(refInt) clearInterval(refInt);
-            refInt=setInterval(function(){pn.publish({channel:'nm-main',message:{type:'who'}});pn.publish({channel:'nm-main',message:{type:'on',u:me}});},6000);
+            setTimeout(function(){pn.publish({channel:'nm-main',message:{type:'on',u:me}});},300);
+            setTimeout(function(){pn.publish({channel:'nm-main',message:{type:'who'}});},800);
+            if(refInt)clearInterval(refInt);
+            refInt=setInterval(function(){pn.publish({channel:'nm-main',message:{type:'who'}});pn.publish({channel:'nm-main',message:{type:'on',u:me}});},5000);
         }
+        function refreshUsers(){onl=[];renderUsers();if(pn){pn.publish({channel:'nm-main',message:{type:'on',u:me}});setTimeout(function(){pn.publish({channel:'nm-main',message:{type:'who'}});},300);}toast('🔄 Обновлено');}
+        function addStory(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(ev){if(!stories[me])stories[me]=[];stories[me].push({img:ev.target.result,t:Date.now()});renderStories();pn.publish({channel:'nm-main',message:{type:'story',u:me,img:ev.target.result}});toast('📸 Готово!');};r.readAsDataURL(f);}
+        function viewStory(u){var s=stories[u];if(!s||s.length===0){toast('Нет историй');return;}document.getElementById('storyImage').src=s[s.length-1].img;document.getElementById('storyViewer').classList.add('active');}
+        function closeStory(){document.getElementById('storyViewer').classList.remove('active');}
+        function renderStories(){var b=document.getElementById('storiesBar');var h='<div class="story-item" onclick="document.getElementById(\'storyInput\').click()"><div class="story-ring"><div class="story-ring-inner" style="font-size:22px;color:var(--accent)">+</div></div><div class="story-name">Моя</div></div>';if(stories[me]&&stories[me].length>0){var s=stories[me];h+='<div class="story-item" onclick="viewStory(\''+me+'\')"><div class="story-ring"><div class="story-ring-inner"><img src="'+s[s.length-1].img+'"></div></div><div class="story-name">Я</div></div>';}var ks=Object.keys(stories);for(var i=0;i<ks.length;i++){if(ks[i]===me)continue;var us=stories[ks[i]];if(us.length>0)h+='<div class="story-item" onclick="viewStory(\''+ks[i]+'\')"><div class="story-ring"><div class="story-ring-inner"><img src="'+us[us.length-1].img+'"></div></div><div class="story-name">'+ks[i]+'</div></div>';}b.innerHTML=h;}
 
-        function refreshUsers(){ onl=[]; renderUsers(); if(pn){pn.publish({channel:'nm-main',message:{type:'on',u:me}});setTimeout(function(){pn.publish({channel:'nm-main',message:{type:'who'}});},300);} toast('🔄 Обновлено'); }
-
-        function addStory(e){ var f=e.target.files[0]; if(!f)return; var r=new FileReader(); r.onload=function(ev){ if(!stories[me]) stories[me]=[]; stories[me].push({img:ev.target.result,t:Date.now()}); renderStories(); pn.publish({channel:'nm-main',message:{type:'story',u:me,img:ev.target.result}}); toast('📸 Готово!'); }; r.readAsDataURL(f); }
-        function viewStory(u){ var s=stories[u]; if(!s||s.length===0){toast('Нет историй');return;} document.getElementById('storyImage').src=s[s.length-1].img; document.getElementById('storyViewer').classList.add('active'); }
-        function closeStory(){ document.getElementById('storyViewer').classList.remove('active'); }
-        function renderStories(){
-            var b=document.getElementById('storiesBar');
-            var h='<div class="story-item" onclick="document.getElementById(\'storyInput\').click()"><div class="story-ring"><div class="story-ring-inner" style="font-size:22px;color:var(--accent)">+</div></div><div class="story-name">Моя</div></div>';
-            if(stories[me]&&stories[me].length>0){ var s=stories[me]; h+='<div class="story-item" onclick="viewStory(\''+me+'\')"><div class="story-ring"><div class="story-ring-inner"><img src="'+s[s.length-1].img+'"></div></div><div class="story-name">Я</div></div>'; }
-            var ks=Object.keys(stories); for(var i=0;i<ks.length;i++){ if(ks[i]===me) continue; var us=stories[ks[i]]; if(us.length>0) h+='<div class="story-item" onclick="viewStory(\''+ks[i]+'\')"><div class="story-ring"><div class="story-ring-inner"><img src="'+us[us.length-1].img+'"></div></div><div class="story-name">'+ks[i]+'</div></div>'; }
-            b.innerHTML=h;
+        function toggleVoice(){if(rec)stopRec();else startRec();}
+        async function startRec(){
+            try{
+                var s=await navigator.mediaDevices.getUserMedia({audio:true});
+                mr=new MediaRecorder(s,{mimeType:'audio/webm;codecs=opus'});
+                ach=[];
+                mr.ondataavailable=function(e){if(e.data.size>0)ach.push(e.data);};
+                mr.onstop=function(){
+                    var b=new Blob(ach,{type:'audio/webm'});
+                    if(b.size>300000){toast('❌ Слишком длинное');s.getTracks().forEach(function(t){t.stop();});rec=false;document.getElementById('voiceBtn').classList.remove('recording');document.getElementById('voiceBtn').textContent='🎤';return;}
+                    var r=new FileReader();
+                    r.onload=function(ev){sendVoice(ev.target.result);};
+                    r.readAsDataURL(b);
+                    s.getTracks().forEach(function(t){t.stop();});
+                };
+                mr.start();rec=true;document.getElementById('voiceBtn').classList.add('recording');document.getElementById('voiceBtn').textContent='⏹';toast('🎤 Запись...');
+                setTimeout(function(){if(rec)stopRec();},15000);
+            }catch(e){toast('❌ Нет доступа к микрофону');}
         }
-
-        function toggleVoice(){ if(rec) stopRec(); else startRec(); }
-        async function startRec(){ try{ var s=await navigator.mediaDevices.getUserMedia({audio:true}); mr=new MediaRecorder(s); ach=[]; mr.ondataavailable=function(e){ach.push(e.data);}; mr.onstop=function(){ var b=new Blob(ach,{type:'audio/webm'}); var r=new FileReader(); r.onload=function(ev){ sendVoice(ev.target.result); }; r.readAsDataURL(b); s.getTracks().forEach(function(t){t.stop();}); }; mr.start(); rec=true; document.getElementById('voiceBtn').classList.add('recording'); document.getElementById('voiceBtn').textContent='⏹'; toast('🎤 Запись...'); }catch(e){toast('❌ Нет микрофона');} }
-        function stopRec(){ if(mr){mr.stop();rec=false;document.getElementById('voiceBtn').classList.remove('recording');document.getElementById('voiceBtn').textContent='🎤';} }
-        function sendVoice(d){ if(!cur||!pn)return; var m={id:Date.now().toString(),type:'voice',from:me,ch:cur,audio:d,t:new Date().toISOString(),reactions:{}}; pn.publish({channel:cur,message:m}); pn.publish({channel:me,message:m}); if(!msgs[cur]) msgs[cur]=[]; msgs[cur].push(m); save(); renderMsgs(); }
+        function stopRec(){if(mr&&rec){mr.stop();rec=false;document.getElementById('voiceBtn').classList.remove('recording');document.getElementById('voiceBtn').textContent='🎤';}}
+        function sendVoice(d){if(!cur||!pn)return;var m={id:Date.now().toString(),type:'voice',from:me,ch:cur,audio:d,t:new Date().toISOString(),reactions:{}};pn.publish({channel:cur,message:m});pn.publish({channel:me,message:m});if(!msgs[cur])msgs[cur]=[];msgs[cur].push(m);save();renderMsgs();}
 
         function sendMsg(){
             if(!cur||!pn)return;
-            var t=document.getElementById('messageInput').value.trim(); if(!t)return;
+            var t=document.getElementById('messageInput').value.trim();if(!t)return;
             var m={id:Date.now().toString(),type:'msg',from:me,ch:cur,text:t,t:new Date().toISOString(),reactions:{}};
             pn.publish({channel:cur,message:m});
             pn.publish({channel:me,message:m});
-            if(!msgs[cur]) msgs[cur]=[]; msgs[cur].push(m);
-            save(); renderMsgs();
-            document.getElementById('messageInput').value=''; document.getElementById('messageInput').focus();
+            if(!msgs[cur])msgs[cur]=[];msgs[cur].push(m);
+            save();renderMsgs();
+            document.getElementById('messageInput').value='';document.getElementById('messageInput').focus();
         }
-
         function addReaction(id,em){
-            if(!cur||!pn)return; var ml=msgs[cur]; if(!ml)return;
-            var m=null; for(var i=0;i<ml.length;i++){if(ml[i].id===id){m=ml[i];break;}} if(!m)return;
-            if(!m.reactions) m.reactions={}; if(!m.reactions[em]) m.reactions[em]=[];
+            if(!cur||!pn)return;var ml=msgs[cur];if(!ml)return;
+            var m=null;for(var i=0;i<ml.length;i++){if(ml[i].id===id){m=ml[i];break;}}if(!m)return;
+            if(!m.reactions)m.reactions={};if(!m.reactions[em])m.reactions[em]=[];
             var idx=m.reactions[em].indexOf(me);
-            if(idx!==-1){m.reactions[em].splice(idx,1);if(m.reactions[em].length===0) delete m.reactions[em];}
+            if(idx!==-1){m.reactions[em].splice(idx,1);if(m.reactions[em].length===0)delete m.reactions[em];}
             else m.reactions[em].push(me);
-            m.type='reaction'; pn.publish({channel:cur,message:m}); pn.publish({channel:me,message:m});
-            save(); renderMsgs();
-            var ps=document.querySelectorAll('.reaction-picker'); for(var p=0;p<ps.length;p++) ps[p].classList.remove('active');
+            m.type='reaction';pn.publish({channel:cur,message:m});pn.publish({channel:me,message:m});
+            save();renderMsgs();
+            var ps=document.querySelectorAll('.reaction-picker');for(var p=0;p<ps.length;p++)ps[p].classList.remove('active');
         }
-
         function addMsgDOM(m){
-            var c=document.getElementById('messagesContainer'); var r=document.createElement('div');
-            var s=m.from===me; r.className='msg-row '+(s?'sent':'received'); r.id='msg-'+m.id;
-            var ct='';
-            if(m.type==='voice'){ ct='<div class="voice-msg"><button class="voice-play-btn" onclick="playV(\''+m.id+'\')">▶</button>🎤 Голосовое</div>'; window['aud_'+m.id]=m.audio; }
-            else ct=esc(m.text);
-            var rh='';
-            if(m.reactions&&Object.keys(m.reactions).length>0){ rh='<div class="reactions-bar">'; var ks=Object.keys(m.reactions); for(var k=0;k<ks.length;k++){var e=ks[k];var u=m.reactions[e];var a=u.indexOf(me)!==-1; rh+='<span class="reaction-item'+(a?' active':'')+'" onclick="addReaction(\''+m.id+'\',\''+e+'\')">'+e+' '+u.length+'</span>';} rh+='</div>'; }
-            var ph='<div class="reaction-picker" id="pk-'+m.id+'">'; for(var r2=0;r2<REAC.length;r2++){ph+='<span onclick="addReaction(\''+m.id+'\',\''+REAC[r2]+'\')">'+REAC[r2]+'</span>';} ph+='</div>';
+            var c=document.getElementById('messagesContainer'),r=document.createElement('div');
+            r.className='msg-row '+(m.from===me?'sent':'received');r.id='msg-'+m.id;
+            var ct=m.type==='voice'?'<div class="voice-msg"><button class="voice-play-btn" onclick="playV(\''+m.id+'\')">▶</button>🎤 ГС</div>':esc(m.text);
+            if(m.type==='voice')window['aud_'+m.id]=m.audio;
+            var rh='';if(m.reactions&&Object.keys(m.reactions).length>0){rh='<div class="reactions-bar">';var ks=Object.keys(m.reactions);for(var k=0;k<ks.length;k++){var e=ks[k],u=m.reactions[e],a=u.indexOf(me)!==-1;rh+='<span class="reaction-item'+(a?' active':'')+'" onclick="addReaction(\''+m.id+'\',\''+e+'\')">'+e+' '+u.length+'</span>';}rh+='</div>';}
+            var ph='<div class="reaction-picker" id="pk-'+m.id+'">';for(var r2=0;r2<REAC.length;r2++)ph+='<span onclick="addReaction(\''+m.id+'\',\''+REAC[r2]+'\')">'+REAC[r2]+'</span>';ph+='</div>';
             r.innerHTML='<div class="msg-bubble" onclick="togPk(\''+m.id+'\')" oncontextmenu="event.preventDefault();togPk(\''+m.id+'\')">'+ct+ph+'</div>'+rh;
-            c.appendChild(r); c.scrollTop=c.scrollHeight;
+            c.appendChild(r);c.scrollTop=c.scrollHeight;
         }
-        function playV(id){ var d=window['aud_'+id]; if(!d){toast('❌ Ошибка');return;} var a=new Audio(d); a.play().catch(function(){toast('❌ Ошибка');}); }
-        function togPk(id){ var ps=document.querySelectorAll('.reaction-picker'); for(var i=0;i<ps.length;i++){if(ps[i].id!=='pk-'+id) ps[i].classList.remove('active');} var p=document.getElementById('pk-'+id); if(p) p.classList.toggle('active'); }
-
-        function renderMsgs(){ var c=document.getElementById('messagesContainer'); c.innerHTML=''; var ml=msgs[cur]||[]; if(ml.length===0){c.innerHTML='<div class="empty-chat">Нет сообщений</div>';return;} for(var i=0;i<ml.length;i++) addMsgDOM(ml[i]); }
-
-        function openChat(u){ 
-            cur=u; 
-            if(!msgs[cur]) msgs[cur]=[]; 
-            document.getElementById('chatAvatar').textContent=u.charAt(0).toUpperCase(); 
-            document.getElementById('chatAvatar').style.background=getCol(u); 
-            document.getElementById('chatName').textContent=u; 
-            document.getElementById('chatStatus').textContent='онлайн'; 
-            document.getElementById('chatStatus').style.color='var(--online)'; 
-            document.getElementById('chatArea').classList.add('active'); 
-            pn.subscribe({channels:[u,me]});
-            renderMsgs(); 
-            renderUsers(); 
-            setTimeout(function(){document.getElementById('messageInput').focus();},200); 
+        function playV(id){
+            var d=window['aud_'+id];if(!d){toast('❌ Аудио не найдено');return;}
+            var a=new Audio(d);
+            a.onerror=function(){toast('❌ Ошибка аудио');};
+            a.play().then(function(){toast('▶ Играет');}).catch(function(){toast('❌ Нажми ещё раз');});
         }
-        function closeChat(){ cur=null; document.getElementById('chatArea').classList.remove('active'); document.getElementById('messagesContainer').innerHTML='<div class="empty-chat">Выбери контакт</div>'; renderUsers(); }
+        function togPk(id){var ps=document.querySelectorAll('.reaction-picker');for(var i=0;i<ps.length;i++){if(ps[i].id!=='pk-'+id)ps[i].classList.remove('active');}var p=document.getElementById('pk-'+id);if(p)p.classList.toggle('active');}
+        function renderMsgs(){var c=document.getElementById('messagesContainer');c.innerHTML='';var ml=msgs[cur]||[];if(ml.length===0){c.innerHTML='<div class="empty-chat">Нет сообщений</div>';return;}for(var i=0;i<ml.length;i++)addMsgDOM(ml[i]);}
+        function openChat(u){cur=u;if(!msgs[cur])msgs[cur]=[];document.getElementById('chatAvatar').textContent=u.charAt(0).toUpperCase();document.getElementById('chatAvatar').style.background=getCol(u);document.getElementById('chatName').textContent=u;document.getElementById('chatStatus').textContent='онлайн';document.getElementById('chatStatus').style.color='var(--online)';document.getElementById('chatArea').classList.add('active');pn.subscribe({channels:[u,me]});renderMsgs();renderUsers();setTimeout(function(){document.getElementById('messageInput').focus();},200);}
+        function closeChat(){cur=null;document.getElementById('chatArea').classList.remove('active');document.getElementById('messagesContainer').innerHTML='<div class="empty-chat">Выбери контакт</div>';renderUsers();}
+        function renderUsers(){var o=onl.filter(function(u){return u!==me;});var h='';if(o.length===0){h='<div style="padding:20px;color:var(--text2);text-align:center;font-size:12px;">Никого онлайн 😴</div>';}else{for(var i=0;i<o.length;i++){var u=o[i],s=cur===u?' selected':'';var lm=msgs[u]?msgs[u][msgs[u].length-1]:null;var lt=lm?(lm.text?lm.text.substring(0,25):(lm.type==='voice'?'🎤 Голосовое':'')):'';h+='<div class="user-item'+s+'" onclick="openChat(\''+u+'\')"><div class="user-avatar" style="background:'+getCol(u)+'">'+u.charAt(0).toUpperCase()+'</div><div class="user-info"><div class="user-name">'+u+'</div><div class="user-last">'+(lt||'Нет сообщений')+'</div></div><div class="online-dot"></div></div>';}}document.getElementById('usersOnline').innerHTML=h;}
+        function filterUsers(){var q=document.getElementById('searchInput').value.toLowerCase();var is=document.querySelectorAll('.user-item');for(var i=0;i<is.length;i++){var n=(is[i].querySelector('.user-name')||{}).textContent||'';is[i].style.display=n.toLowerCase().indexOf(q)!==-1?'flex':'none';}}
+        function getCol(n){var h=0;for(var i=0;i<n.length;i++)h=n.charCodeAt(i)+((h<<5)-h);return COLS[Math.abs(h)%COLS.length];}
+        function doLogout(){if(pn){pn.unsubscribeAll();pn=null;}if(refInt){clearInterval(refInt);refInt=null;}me='';myAva='';cur=null;onl=[];msgs={};document.getElementById('loginScreen').style.display='flex';document.getElementById('app').style.display='none';document.getElementById('chatArea').classList.remove('active');}
+        function save(){try{var d={};var ks=Object.keys(msgs);for(var i=0;i<ks.length;i++)d[ks[i]]=msgs[ks[i]].slice(-500);localStorage.setItem('nm_msgs_'+me,JSON.stringify(d));localStorage.setItem('nm_user',me);if(myAva)localStorage.setItem('nm_ava',myAva);}catch(e){}}
+        function load(){var s=localStorage.getItem('nm_msgs_'+me);if(s){try{msgs=JSON.parse(s);}catch(e){msgs={};}}}
+        function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML;}
 
-        function renderUsers(){ var o=onl.filter(function(u){return u!==me;}); var h=''; if(o.length===0){h='<div style="padding:20px;color:var(--text2);text-align:center;font-size:12px;">Никого онлайн</div>';}else{for(var i=0;i<o.length;i++){var u=o[i];var s=cur===u?' selected':'';var lm=msgs[u]?msgs[u][msgs[u].length-1]:null;var lt=lm?(lm.text?lm.text.substring(0,25):(lm.type==='voice'?'🎤 Голосовое':'')):''; h+='<div class="user-item'+s+'" onclick="openChat(\''+u+'\')"><div class="user-avatar" style="background:'+getCol(u)+'">'+u.charAt(0).toUpperCase()+'</div><div class="user-info"><div class="user-name">'+u+'</div><div class="user-last">'+(lt||'Нет сообщений')+'</div></div><div class="online-dot"></div></div>';}} document.getElementById('usersOnline').innerHTML=h; }
-        function filterUsers(){ var q=document.getElementById('searchInput').value.toLowerCase(); var is=document.querySelectorAll('.user-item'); for(var i=0;i<is.length;i++){var n=(is[i].querySelector('.user-name')||{}).textContent||''; is[i].style.display=n.toLowerCase().indexOf(q)!==-1?'flex':'none';} }
-        function getCol(n){ var h=0; for(var i=0;i<n.length;i++) h=n.charCodeAt(i)+((h<<5)-h); return COLS[Math.abs(h)%COLS.length]; }
-        function doLogout(){ if(pn){pn.unsubscribeAll();pn=null;} if(refInt){clearInterval(refInt);refInt=null;} me='';myAva='';cur=null;onl=[];msgs={}; document.getElementById('loginScreen').style.display='flex'; document.getElementById('app').style.display='none'; document.getElementById('chatArea').classList.remove('active'); }
-        function save(){ try{var d={};var ks=Object.keys(msgs);for(var i=0;i<ks.length;i++) d[ks[i]]=msgs[ks[i]].slice(-500); localStorage.setItem('nm_msgs_'+me,JSON.stringify(d)); localStorage.setItem('nm_user',me); if(myAva) localStorage.setItem('nm_ava',myAva);}catch(e){} }
-        function load(){ var s=localStorage.getItem('nm_msgs_'+me); if(s){try{msgs=JSON.parse(s);}catch(e){msgs={};}} }
-        function esc(s){ var d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
-
-        var su=localStorage.getItem('nm_user');
-        var sa=localStorage.getItem('nm_ava');
-        if(su){ me=su; myAva=sa||''; document.getElementById('loginInput').value=su; if(sa){document.getElementById('loginAvatar').innerHTML='<img src="'+sa+'">';tmpAva=sa;} document.getElementById('passInput').placeholder='Пароль'; reg=false; document.querySelector('.btn-outline').textContent='🔑 Уже есть аккаунт'; }
+        var su=localStorage.getItem('nm_user'),sa=localStorage.getItem('nm_ava');
+        if(su){me=su;myAva=sa||'';document.getElementById('loginInput').value=su;if(sa){document.getElementById('loginAvatar').innerHTML='<img src="'+sa+'">';tmpAva=sa;}document.getElementById('passInput').placeholder='Пароль';reg=false;document.querySelector('.btn-outline').textContent='🔑 Уже есть аккаунт';}
     </script>
 </body>
 </html>
