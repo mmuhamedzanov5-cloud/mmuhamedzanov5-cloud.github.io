@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>⚡ NeonMess</title>
-    <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.7.4.0.min.js"></script>
+    <script src="https://cdn.ably.com/lib/ably.min-1.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <style>
         :root { --bg:#0a0f0a;--bg2:#111a11;--chat-bg:#0a0f0a;--text:#c8e6c8;--text2:#8fbc8f;--bubble-sent:#1a3a1a;--bubble-rec:#152015;--header:#111a11;--border:#2a3a2a;--online:#5aeb5a;--accent:#3adb3a;--accent2:#2a8a2a;--input:#152015;--hover:rgba(58,219,58,0.05);--shadow:0 0 20px rgba(58,219,58,0.08);--snow:block; }
@@ -153,9 +153,9 @@
         </div>
     </div>
     <script>
-        var PUB="pub-c-655d51c3-fd54-4c43-9471-d97d1cdac46d",SUB="sub-c-1e441f81-82f3-41be-a35f-16661ae18aee";
-        var pn,me='',myAva='',cur='',onl=[],msgs={},tmpAva='',reg=true,refInt,stories={},mr,ach=[],rec=false;
-        var REAC=['❤️','🔥','😂','😢','😮','👏'],COLS=['#3adb3a','#5aeb5a','#2a8a2a','#6fcf6f','#4ae54a','#8fbc8f'];
+        var ABLY_KEY = "btJ6Mg.yddMAw:yL89TzO4FWwtxI0ZYhXfbkeK0n-DH89bqQ34Jontots";
+        var ably, channel, me='', myAva='', cur='', onl=[], msgs={}, tmpAva='', reg=true, refInt, stories={}, mr, ach=[], rec=false;
+        var REAC=['❤️','🔥','😂','😢','😮','👏'];
 
         function snow(){var c=document.getElementById('snowContainer');c.innerHTML='';for(var i=0;i<30;i++){var f=document.createElement('div');f.className='snowflake';f.textContent='❄';f.style.left=Math.random()*100+'%';f.style.fontSize=(Math.random()*14+6)+'px';f.style.animationDuration=(Math.random()*5+5)+'s';f.style.animationDelay=Math.random()*5+'s';c.appendChild(f);}}
         function setTheme(t){document.documentElement.setAttribute('data-theme',t);localStorage.setItem('nm_theme',t);document.getElementById('themeMenu').classList.remove('active');if(t===''||t==='minecraft')snow();else document.getElementById('snowContainer').innerHTML='';}
@@ -175,19 +175,20 @@
             me=l;myAva=tmpAva;document.getElementById('loginScreen').style.display='none';
             var app=document.getElementById('app');app.style.display='block';if(window.innerWidth>=768)app.style.display='flex';
             document.getElementById('myAvatarSmall').innerHTML=myAva?'<img src="'+myAva+'">':me.charAt(0).toUpperCase();
-            document.getElementById('myNameDisplay').textContent=me;load();initPN();
+            document.getElementById('myNameDisplay').textContent=me;load();initAbly();
             localStorage.setItem('nm_user',me);if(myAva)localStorage.setItem('nm_ava',myAva);
         }
         function err(m){var e=document.getElementById('loginError');e.textContent=m;e.style.display='block';setTimeout(function(){e.style.display='none';},3000);}
         function toast(m){var o=document.querySelector('.toast');if(o)o.remove();var t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(function(){t.remove();},2000);}
 
-        function initPN(){
-            if(pn){pn.unsubscribeAll();}
-            pn=new PubNub({publishKey:PUB,subscribeKey:SUB,uuid:me});
-            pn.addListener({message:function(e){
-                var m=e.message;
+        function initAbly(){
+            ably = new Ably.Realtime({key: ABLY_KEY, clientId: me});
+            channel = ably.channels.get('neonmess');
+
+            channel.subscribe(function(msg){
+                var m = msg.data;
                 if(m.type==='on'){if(m.u!==me&&onl.indexOf(m.u)===-1){onl.push(m.u);renderUsers();toast('👋 '+m.u+' в сети');}return;}
-                if(m.type==='who'){pn.publish({channel:'neonmess',message:{type:'on',u:me}});return;}
+                if(m.type==='who'){channel.publish('neonmess',{type:'on',u:me});return;}
                 if(m.type==='story'){if(!stories[m.u])stories[m.u]=[];stories[m.u].push({img:m.img,t:Date.now()});renderStoriesBar();return;}
                 if(m.type==='msg'||m.type==='voice'||m.type==='reaction'){
                     var key=m.to===me?m.from:(m.from===me?m.to:null);if(!key)return;
@@ -196,15 +197,16 @@
                     if(ex!==-1)msgs[key][ex]=m;else msgs[key].push(m);
                     save();if(cur===key)renderMsgs();renderUsers();
                 }
-            }});
-            pn.subscribe({channels:['neonmess']});
-            pn.publish({channel:'neonmess',message:{type:'on',u:me}});
-            pn.publish({channel:'neonmess',message:{type:'who'}});
+            });
+
+            channel.publish({type:'on',u:me});
+            channel.publish({type:'who'});
             if(refInt)clearInterval(refInt);
-            refInt=setInterval(function(){pn.publish({channel:'neonmess',message:{type:'who'}});pn.publish({channel:'neonmess',message:{type:'on',u:me}});},5000);
+            refInt=setInterval(function(){channel.publish({type:'who'});channel.publish({type:'on',u:me});},5000);
         }
-        function refreshUsers(){onl=[];renderUsers();if(pn){pn.publish({channel:'neonmess',message:{type:'on',u:me}});setTimeout(function(){pn.publish({channel:'neonmess',message:{type:'who'}});},300);}toast('🔄 Обновлено');}
-        function addStory(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(ev){if(!stories[me])stories[me]=[];stories[me].push({img:ev.target.result,t:Date.now()});renderStoriesBar();pn.publish({channel:'neonmess',message:{type:'story',u:me,img:ev.target.result}});toast('📸 Готово!');};r.readAsDataURL(f);}
+
+        function refreshUsers(){onl=[];renderUsers();if(channel){channel.publish({type:'on',u:me});setTimeout(function(){channel.publish({type:'who'});},300);}toast('🔄 Обновлено');}
+        function addStory(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(ev){if(!stories[me])stories[me]=[];stories[me].push({img:ev.target.result,t:Date.now()});renderStoriesBar();channel.publish({type:'story',u:me,img:ev.target.result});toast('📸 Готово!');};r.readAsDataURL(f);}
         function viewStory(u){var s=stories[u];if(!s||s.length===0){toast('Нет историй');return;}document.getElementById('storyImage').src=s[s.length-1].img;document.getElementById('storyViewer').classList.add('active');}
         function closeStory(){document.getElementById('storyViewer').classList.remove('active');}
         function renderStoriesBar(){
@@ -218,22 +220,24 @@
         function toggleVoice(){if(rec)stopRec();else startRec();}
         async function startRec(){try{var s=await navigator.mediaDevices.getUserMedia({audio:true});mr=new MediaRecorder(s);ach=[];mr.ondataavailable=function(e){if(e.data.size>0)ach.push(e.data);};mr.onstop=function(){var b=new Blob(ach,{type:'audio/webm'});var r=new FileReader();r.onload=function(ev){sendVoice(ev.target.result);};r.readAsDataURL(b);s.getTracks().forEach(function(t){t.stop();});};mr.start();rec=true;document.getElementById('voiceBtn').classList.add('recording');document.getElementById('voiceBtn').textContent='⏹';toast('🎤 Запись...');setTimeout(function(){if(rec)stopRec();},15000);}catch(e){toast('❌ Нет микрофона');}}
         function stopRec(){if(mr&&rec){mr.stop();rec=false;document.getElementById('voiceBtn').classList.remove('recording');document.getElementById('voiceBtn').textContent='🎤';}}
-        function sendVoice(d){if(!cur||!pn)return;var m={id:Date.now().toString(),type:'voice',from:me,to:cur,audio:d,t:new Date().toISOString(),reactions:{}};pn.publish({channel:'neonmess',message:m});if(!msgs[cur])msgs[cur]=[];msgs[cur].push(m);save();renderMsgs();}
+        function sendVoice(d){if(!cur||!channel)return;var m={id:Date.now().toString(),type:'voice',from:me,to:cur,audio:d,t:new Date().toISOString(),reactions:{}};channel.publish(m);if(!msgs[cur])msgs[cur]=[];msgs[cur].push(m);save();renderMsgs();}
 
         function sendMsg(){
-            if(!cur||!pn)return;var t=document.getElementById('messageInput').value.trim();if(!t)return;
+            if(!cur||!channel)return;var t=document.getElementById('messageInput').value.trim();if(!t)return;
             var m={id:Date.now().toString(),type:'msg',from:me,to:cur,text:t,t:new Date().toISOString(),reactions:{}};
-            pn.publish({channel:'neonmess',message:m});
+            channel.publish(m);
             if(!msgs[cur])msgs[cur]=[];msgs[cur].push(m);save();renderMsgs();
             document.getElementById('messageInput').value='';document.getElementById('messageInput').focus();
         }
+
         function addReaction(id,em){
-            if(!cur||!pn)return;var ml=msgs[cur];if(!ml)return;var m=null;for(var i=0;i<ml.length;i++){if(ml[i].id===id){m=ml[i];break;}}if(!m)return;
+            if(!cur||!channel)return;var ml=msgs[cur];if(!ml)return;var m=null;for(var i=0;i<ml.length;i++){if(ml[i].id===id){m=ml[i];break;}}if(!m)return;
             if(!m.reactions)m.reactions={};if(!m.reactions[em])m.reactions[em]=[];var idx=m.reactions[em].indexOf(me);
             if(idx!==-1){m.reactions[em].splice(idx,1);if(m.reactions[em].length===0)delete m.reactions[em];}else m.reactions[em].push(me);
-            m.type='reaction';pn.publish({channel:'neonmess',message:m});save();renderMsgs();
+            m.type='reaction';channel.publish(m);save();renderMsgs();
             document.querySelectorAll('.reaction-picker').forEach(function(p){p.classList.remove('active');});
         }
+
         function addMsgDOM(m){
             var c=document.getElementById('messagesContainer'),r=document.createElement('div');r.className='msg-row '+(m.from===me?'sent':'received');r.id='msg-'+m.id;
             var ct=m.type==='voice'?'<div class="voice-msg"><button class="voice-play-btn" onclick="playV(\''+m.id+'\')">▶</button>🎤 ГС</div>':esc(m.text);
@@ -254,7 +258,7 @@
             document.getElementById('usersOnline').innerHTML=h;
         }
         function filterUsers(){var q=document.getElementById('searchInput').value.toLowerCase();document.querySelectorAll('.user-item').forEach(function(el){var n=(el.querySelector('.user-name')||{}).textContent||'';el.style.display=n.toLowerCase().indexOf(q)!==-1?'flex':'none';});}
-        function doLogout(){if(pn){pn.unsubscribeAll();pn=null;}if(refInt){clearInterval(refInt);refInt=null;}me='';myAva='';cur=null;onl=[];msgs={};document.getElementById('loginScreen').style.display='flex';document.getElementById('app').style.display='none';}
+        function doLogout(){if(ably){ably.close();ably=null;}if(refInt){clearInterval(refInt);refInt=null;}me='';myAva='';cur=null;onl=[];msgs={};document.getElementById('loginScreen').style.display='flex';document.getElementById('app').style.display='none';}
         function save(){try{var d={};Object.keys(msgs).forEach(function(k){d[k]=msgs[k].slice(-500);});localStorage.setItem('nm_msgs_'+me,JSON.stringify(d));localStorage.setItem('nm_user',me);if(myAva)localStorage.setItem('nm_ava',myAva);}catch(e){}}
         function load(){var s=localStorage.getItem('nm_msgs_'+me);if(s){try{msgs=JSON.parse(s);}catch(e){msgs={};}}}
         function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML;}
