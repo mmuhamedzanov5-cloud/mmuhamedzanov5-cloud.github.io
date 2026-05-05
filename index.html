@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>⚡ NeonMess</title>
     <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.7.4.0.min.js"></script>
     <style>
@@ -26,7 +26,7 @@
             --shadow: 0 2px 10px rgba(0,0,0,0.08);
             --radius: 16px;
             --radius-sm: 10px;
-            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition: 0.3s ease;
         }
 
         [data-theme="dark"] {
@@ -66,21 +66,26 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--bg);
             color: var(--text);
-            height: 100dvh;
+            height: 100vh;
+            width: 100vw;
             overflow: hidden;
             -webkit-tap-highlight-color: transparent;
+            -webkit-user-select: none;
             user-select: none;
             transition: background var(--transition), color var(--transition);
         }
 
         /* ЭКРАН ВХОДА */
         .login-screen {
-            height: 100dvh;
+            height: 100vh;
+            width: 100vw;
             display: flex;
             align-items: center;
             justify-content: center;
             background: linear-gradient(135deg, #1a0033 0%, #0a0a0a 50%, #00ff88 150%);
             padding: 20px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         .login-card {
@@ -104,10 +109,8 @@
         .login-card h1 {
             font-size: 28px;
             margin-bottom: 4px;
-            background: linear-gradient(135deg, #00ff88, #9b59b6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: #00ff88;
+            text-shadow: 0 0 10px rgba(0,255,136,0.5);
         }
 
         .login-card p {
@@ -150,8 +153,10 @@
             background: var(--input-bg);
             color: var(--text);
             transition: all var(--transition);
+            outline: none;
+            -webkit-appearance: none;
         }
-        .input-group input:focus { outline: none; border-color: #00ff88; }
+        .input-group input:focus { border-color: #00ff88; }
 
         .btn {
             width: 100%; padding: 14px; border: none;
@@ -160,6 +165,7 @@
             background: linear-gradient(135deg, #00ff88, #9b59b6);
             color: white; letter-spacing: 0.5px;
             transition: all var(--transition);
+            -webkit-appearance: none;
         }
         .btn:active { transform: scale(0.97); }
         .btn-outline {
@@ -168,23 +174,25 @@
             font-size: 14px; font-weight: 600; cursor: pointer;
             background: transparent; color: #00ff88;
             margin-top: 8px; transition: all var(--transition);
+            -webkit-appearance: none;
         }
         .error-msg { color: #ef4444; font-size: 13px; margin-top: 8px; display: none; }
 
         /* ПРИЛОЖЕНИЕ */
         .app {
-            height: 100dvh;
-            display: none;
+            height: 100vh;
+            width: 100vw;
+            display: block;
             background: var(--bg);
         }
 
         @media (min-width: 768px) {
             .app {
-                display: none;
+                display: flex;
                 flex-direction: row;
                 max-width: 1200px;
-                height: 92dvh;
-                margin: 2dvh auto;
+                height: 92vh;
+                margin: 4vh auto;
                 border-radius: var(--radius);
                 box-shadow: var(--shadow);
                 overflow: hidden;
@@ -204,6 +212,7 @@
             .sidebar {
                 width: 340px;
                 min-width: 340px;
+                height: 100%;
             }
         }
 
@@ -212,6 +221,7 @@
             background: var(--header-bg);
             border-bottom: 1px solid var(--border);
             position: relative;
+            flex-shrink: 0;
         }
 
         .profile-row {
@@ -256,6 +266,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
         }
 
         .logout-btn {
@@ -266,6 +277,7 @@
             border-radius: 14px;
             font-size: 11px;
             cursor: pointer;
+            flex-shrink: 0;
         }
 
         .search-box {
@@ -276,10 +288,12 @@
             background: var(--input-bg);
             color: var(--text);
             font-size: 13px;
+            outline: none;
+            -webkit-appearance: none;
         }
 
         .search-box::placeholder { color: var(--text-secondary); }
-        .search-box:focus { outline: none; background: var(--hover); }
+        .search-box:focus { background: var(--hover); }
 
         .users-list {
             flex: 1;
@@ -302,10 +316,12 @@
             padding: 10px 14px;
             cursor: pointer;
             gap: 10px;
+            transition: background var(--transition);
         }
 
         .user-item:hover { background: var(--hover); }
         .user-item.selected { background: var(--hover); border-left: 3px solid var(--primary); }
+        .user-item:active { background: var(--hover); }
 
         .user-avatar {
             width: 44px; height: 44px;
@@ -329,21 +345,30 @@
 
         /* ЧАТ */
         .chat-area {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
+            display: none;
             background: var(--bg-chat);
+            height: 100%;
+        }
+
+        @media (min-width: 768px) {
+            .chat-area {
+                display: flex;
+                flex-direction: column;
+                flex: 1;
+            }
         }
 
         @media (max-width: 767px) {
             .chat-area {
                 position: fixed;
                 top: 0; left: 0; right: 0; bottom: 0;
-                z-index: 10;
-                transform: translateX(100%);
-                transition: transform var(--transition);
+                z-index: 50;
+                display: none;
+                flex-direction: column;
             }
-            .chat-area.active { transform: translateX(0); }
+            .chat-area.active {
+                display: flex;
+            }
         }
 
         .chat-header {
@@ -353,6 +378,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            flex-shrink: 0;
         }
 
         .back-btn {
@@ -362,6 +388,7 @@
             font-size: 20px;
             cursor: pointer;
             color: var(--primary);
+            padding: 5px;
         }
 
         @media (max-width: 767px) {
@@ -420,8 +447,6 @@
             box-shadow: var(--bubble-received-shadow);
         }
 
-        .msg-time { font-size: 10px; color: var(--text-secondary); padding: 2px 6px; opacity: 0.7; }
-
         /* Реакции */
         .reactions-bar {
             display: flex; gap: 4px; flex-wrap: wrap; margin-top: 2px; padding: 0 6px;
@@ -449,7 +474,7 @@
             box-shadow: var(--shadow);
             padding: 6px 10px;
             gap: 4px;
-            z-index: 50;
+            z-index: 60;
             border: 1px solid var(--border);
             white-space: nowrap;
         }
@@ -472,6 +497,7 @@
             display: flex;
             gap: 8px;
             align-items: center;
+            flex-shrink: 0;
             padding-bottom: max(10px, env(safe-area-inset-bottom));
         }
 
@@ -484,9 +510,11 @@
             font-family: inherit;
             background: var(--input-bg);
             color: var(--text);
+            outline: none;
+            -webkit-appearance: none;
         }
 
-        .msg-input:focus { outline: none; background: var(--hover); }
+        .msg-input:focus { background: var(--hover); }
 
         .send-btn {
             width: 38px; height: 38px;
@@ -568,7 +596,6 @@
     <!-- ЭКРАН ВХОДА -->
     <div class="login-screen" id="loginScreen">
         <div class="login-card">
-            <!-- Логотип NeonMess -->
             <svg class="logo-img" viewBox="0 0 200 200">
                 <defs>
                     <linearGradient id="neonGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -602,14 +629,14 @@
                 <input type="password" id="passwordInput" placeholder="Придумай пароль" maxlength="20" autocomplete="off">
             </div>
             
-            <button class="btn" onclick="login()">⚡ Войти</button>
+            <button class="btn" onclick="login()">🚀 Войти</button>
             <button class="btn-outline" onclick="toggleMode()">📝 Уже есть аккаунт</button>
             <div class="error-msg" id="loginError"></div>
         </div>
     </div>
 
     <!-- ПРИЛОЖЕНИЕ -->
-    <div class="app" id="app">
+    <div class="app" id="app" style="display:none;">
         <div class="sidebar">
             <div class="sidebar-header">
                 <div class="profile-row">
@@ -666,7 +693,7 @@
         let onlineUsers = [];
         let allMessages = {};
         let tempAvatar = '';
-        let isLoginMode = true; // true = регистрация, false = вход
+        let isLoginMode = true;
 
         const COLORS = ['#667eea','#9b59b6','#00ff88','#ff6b6b','#4facfe','#f093fb','#43e97b','#fa709a'];
         const REACTIONS = ['❤️','🔥','😂','😢','😮','👏'];
@@ -679,42 +706,39 @@
 
         function toggleThemeMenu() { document.getElementById('themeMenu').classList.toggle('active'); }
 
-        document.addEventListener('click', (e) => {
+        document.addEventListener('click', function(e) {
             if (!e.target.closest('.theme-btn')) document.getElementById('themeMenu').classList.remove('active');
         });
 
-        const savedTheme = localStorage.getItem('neonmess-theme') || 'dark';
+        var savedTheme = localStorage.getItem('neonmess-theme') || 'dark';
         setTheme(savedTheme);
 
         function toggleMode() {
             isLoginMode = !isLoginMode;
-            const btn = document.querySelector('.btn-outline');
-            const title = document.querySelector('.login-card h1');
+            var btn = document.querySelector('.btn-outline');
             if (isLoginMode) {
                 btn.textContent = '📝 Уже есть аккаунт';
-                title.textContent = 'Создать аккаунт';
             } else {
                 btn.textContent = '✨ Создать аккаунт';
-                title.textContent = 'Войти';
             }
         }
 
         function pickAvatar(e) {
-            const file = e.target.files[0];
+            var file = e.target.files[0];
             if (!file) return;
-            const reader = new FileReader();
-            reader.onload = (ev) => {
-                const img = new Image();
-                img.onload = () => {
-                    const canvas = document.createElement('canvas');
-                    const max = 150;
-                    let w = img.width, h = img.height;
+            var reader = new FileReader();
+            reader.onload = function(ev) {
+                var img = new Image();
+                img.onload = function() {
+                    var canvas = document.createElement('canvas');
+                    var max = 150;
+                    var w = img.width, h = img.height;
                     if (w > h) { if (w > max) { h *= max/w; w = max; } }
                     else { if (h > max) { w *= max/h; h = max; } }
                     canvas.width = w; canvas.height = h;
                     canvas.getContext('2d').drawImage(img, 0, 0, w, h);
                     tempAvatar = canvas.toDataURL('image/jpeg', 0.5);
-                    document.getElementById('loginAvatar').innerHTML = `<img src="${tempAvatar}"><div class="overlay">Аватар</div>`;
+                    document.getElementById('loginAvatar').innerHTML = '<img src="'+tempAvatar+'"><div class="overlay">Аватар</div>';
                 };
                 img.src = ev.target.result;
             };
@@ -722,8 +746,8 @@
         }
 
         function login() {
-            const nick = document.getElementById('nicknameInput').value.trim();
-            const pass = document.getElementById('passwordInput').value.trim();
+            var nick = document.getElementById('nicknameInput').value.trim();
+            var pass = document.getElementById('passwordInput').value.trim();
 
             if (!nick || nick.length < 2) {
                 showError('Никнейм должен быть не менее 2 символов');
@@ -735,16 +759,14 @@
             }
 
             if (isLoginMode) {
-                // Регистрация
-                const existingPass = localStorage.getItem(`neonmess_pass_${nick}`);
+                var existingPass = localStorage.getItem('neonmess_pass_'+nick);
                 if (existingPass) {
                     showError('Этот никнейм уже занят!');
                     return;
                 }
-                localStorage.setItem(`neonmess_pass_${nick}`, pass);
+                localStorage.setItem('neonmess_pass_'+nick, pass);
             } else {
-                // Вход
-                const savedPass = localStorage.getItem(`neonmess_pass_${nick}`);
+                var savedPass = localStorage.getItem('neonmess_pass_'+nick);
                 if (!savedPass) {
                     showError('Аккаунт не найден');
                     return;
@@ -759,28 +781,27 @@
             myAvatar = tempAvatar;
 
             document.getElementById('loginScreen').style.display = 'none';
-            const app = document.getElementById('app');
-            app.style.display = '';
+            var app = document.getElementById('app');
+            app.style.display = 'block';
             if (window.innerWidth >= 768) app.style.display = 'flex';
 
             document.getElementById('myAvatarSmall').innerHTML = myAvatar
-                ? `<img src="${myAvatar}">`
+                ? '<img src="'+myAvatar+'">'
                 : myUsername.charAt(0).toUpperCase();
             document.getElementById('myNameDisplay').textContent = myUsername;
 
             loadFromStorage();
             initPubNub();
 
-            // Сохраняем
             localStorage.setItem('neonmess_username', myUsername);
             localStorage.setItem('neonmess_avatar', myAvatar || '');
         }
 
         function showError(msg) {
-            const el = document.getElementById('loginError');
+            var el = document.getElementById('loginError');
             el.textContent = msg;
             el.style.display = 'block';
-            setTimeout(() => el.style.display = 'none', 3000);
+            setTimeout(function(){ el.style.display = 'none'; }, 3000);
         }
 
         function initPubNub() {
@@ -792,11 +813,14 @@
             });
 
             pubnub.addListener({
-                message: (event) => {
-                    const msg = event.message;
+                message: function(event) {
+                    var msg = event.message;
                     if (msg.type === 'msg' || msg.type === 'reaction') {
                         if (!allMessages[msg.channel]) allMessages[msg.channel] = [];
-                        const existing = allMessages[msg.channel].findIndex(m => m.id === msg.id);
+                        var existing = -1;
+                        for (var i = 0; i < allMessages[msg.channel].length; i++) {
+                            if (allMessages[msg.channel][i].id === msg.id) { existing = i; break; }
+                        }
                         if (existing !== -1) {
                             allMessages[msg.channel][existing] = msg;
                         } else {
@@ -807,38 +831,38 @@
                         renderUserList();
                     }
                 },
-                presence: (event) => {
+                presence: function(event) {
                     if (event.action === 'join') {
-                        if (!onlineUsers.includes(event.uuid) && event.uuid !== myUsername) {
+                        if (onlineUsers.indexOf(event.uuid) === -1 && event.uuid !== myUsername) {
                             onlineUsers.push(event.uuid);
                             renderUserList();
                         }
                     } else if (event.action === 'leave' || event.action === 'timeout') {
-                        onlineUsers = onlineUsers.filter(u => u !== event.uuid);
+                        onlineUsers = onlineUsers.filter(function(u){ return u !== event.uuid; });
                         renderUserList();
                     }
                 }
             });
 
-            pubnub.subscribe({ channels: ['friends-chat-main'] });
+            pubnub.subscribe({ channels: ['neonmess-main'] });
             pubnub.publish({
-                channel: 'friends-chat-main',
+                channel: 'neonmess-main',
                 message: { type: 'presence', user: myUsername, action: 'join' }
             });
         }
 
         function sendMsg() {
             if (!currentChat || !pubnub) return;
-            const input = document.getElementById('messageInput');
-            const text = input.value.trim();
+            var input = document.getElementById('messageInput');
+            var text = input.value.trim();
             if (!text) return;
 
-            const msg = {
+            var msg = {
                 id: Date.now().toString(),
                 type: 'msg',
                 from: myUsername,
                 channel: currentChat,
-                text,
+                text: text,
                 time: new Date().toISOString(),
                 reactions: {}
             };
@@ -855,14 +879,17 @@
 
         function addReaction(msgId, emoji) {
             if (!currentChat || !pubnub) return;
-            const msgList = allMessages[currentChat];
+            var msgList = allMessages[currentChat];
             if (!msgList) return;
-            const msg = msgList.find(m => m.id === msgId);
+            var msg = null;
+            for (var i = 0; i < msgList.length; i++) {
+                if (msgList[i].id === msgId) { msg = msgList[i]; break; }
+            }
             if (!msg) return;
             if (!msg.reactions) msg.reactions = {};
-
             if (!msg.reactions[emoji]) msg.reactions[emoji] = [];
-            const idx = msg.reactions[emoji].indexOf(myUsername);
+
+            var idx = msg.reactions[emoji].indexOf(myUsername);
             if (idx !== -1) {
                 msg.reactions[emoji].splice(idx, 1);
                 if (msg.reactions[emoji].length === 0) delete msg.reactions[emoji];
@@ -874,57 +901,62 @@
             pubnub.publish({ channel: currentChat, message: msg });
             saveToStorage();
             renderMessages();
-            document.querySelectorAll('.reaction-picker').forEach(p => p.classList.remove('active'));
+            var pickers = document.querySelectorAll('.reaction-picker');
+            for (var p = 0; p < pickers.length; p++) { pickers[p].classList.remove('active'); }
         }
 
         function addMsgToDOM(msg) {
-            const container = document.getElementById('messagesContainer');
-            const row = document.createElement('div');
-            const isSent = msg.from === myUsername;
-            row.className = `msg-row ${isSent ? 'sent' : 'received'}`;
-            row.id = `msg-${msg.id}`;
+            var container = document.getElementById('messagesContainer');
+            var row = document.createElement('div');
+            var isSent = msg.from === myUsername;
+            row.className = 'msg-row ' + (isSent ? 'sent' : 'received');
+            row.id = 'msg-'+msg.id;
 
-            let reactionsHTML = '';
+            var reactionsHTML = '';
             if (msg.reactions && Object.keys(msg.reactions).length > 0) {
                 reactionsHTML = '<div class="reactions-bar">';
-                for (const [emoji, users] of Object.entries(msg.reactions)) {
-                    const isActive = users.includes(myUsername);
-                    reactionsHTML += `<span class="reaction-item${isActive ? ' active' : ''}" onclick="addReaction('${msg.id}','${emoji}')">${emoji} ${users.length}</span>`;
+                var keys = Object.keys(msg.reactions);
+                for (var k = 0; k < keys.length; k++) {
+                    var emoji = keys[k];
+                    var users = msg.reactions[emoji];
+                    var isActive = users.indexOf(myUsername) !== -1;
+                    reactionsHTML += '<span class="reaction-item'+(isActive?' active':'')+'" onclick="addReaction(\''+msg.id+'\',\''+emoji+'\')">'+emoji+' '+users.length+'</span>';
                 }
                 reactionsHTML += '</div>';
             }
 
-            const pickerHTML = `<div class="reaction-picker" id="picker-${msg.id}">${REACTIONS.map(r => `<span onclick="addReaction('${msg.id}','${r}')">${r}</span>`).join('')}</div>`;
+            var pickerHTML = '<div class="reaction-picker" id="picker-'+msg.id+'">';
+            for (var r = 0; r < REACTIONS.length; r++) {
+                pickerHTML += '<span onclick="addReaction(\''+msg.id+'\',\''+REACTIONS[r]+'\')">'+REACTIONS[r]+'</span>';
+            }
+            pickerHTML += '</div>';
 
-            row.innerHTML = `
-                <div class="msg-bubble" onclick="toggleReactionPicker('${msg.id}')" oncontextmenu="event.preventDefault();toggleReactionPicker('${msg.id}')">
-                    ${esc(msg.text)}
-                    ${pickerHTML}
-                </div>
-                ${reactionsHTML}
-            `;
+            row.innerHTML = '<div class="msg-bubble" onclick="toggleReactionPicker(\''+msg.id+'\')" oncontextmenu="event.preventDefault();toggleReactionPicker(\''+msg.id+'\')">'+escHtml(msg.text)+pickerHTML+'</div>'+reactionsHTML;
 
             container.appendChild(row);
             container.scrollTop = container.scrollHeight;
         }
 
         function toggleReactionPicker(msgId) {
-            document.querySelectorAll('.reaction-picker').forEach(p => {
-                if (p.id !== `picker-${msgId}`) p.classList.remove('active');
-            });
-            const picker = document.getElementById(`picker-${msgId}`);
+            var pickers = document.querySelectorAll('.reaction-picker');
+            for (var i = 0; i < pickers.length; i++) {
+                if (pickers[i].id !== 'picker-'+msgId) pickers[i].classList.remove('active');
+            }
+            var picker = document.getElementById('picker-'+msgId);
             if (picker) picker.classList.toggle('active');
         }
 
         function renderMessages() {
-            const container = document.getElementById('messagesContainer');
+            var container = document.getElementById('messagesContainer');
             container.innerHTML = '';
-            const msgs = allMessages[currentChat] || [];
+            var msgs = allMessages[currentChat] || [];
             if (msgs.length === 0) {
                 container.innerHTML = '<div class="empty-chat"><div class="icon">💬</div><p>Нет сообщений</p></div>';
                 return;
             }
-            msgs.forEach(m => addMsgToDOM(m));
+            for (var i = 0; i < msgs.length; i++) {
+                addMsgToDOM(msgs[i]);
+            }
         }
 
         function openChat(username) {
@@ -939,7 +971,7 @@
             pubnub.subscribe({ channels: [username] });
             renderMessages();
             renderUserList();
-            setTimeout(() => document.getElementById('messageInput').focus(), 200);
+            setTimeout(function(){ document.getElementById('messageInput').focus(); }, 200);
         }
 
         function closeChat() {
@@ -950,36 +982,37 @@
         }
 
         function renderUserList() {
-            const others = onlineUsers.filter(u => u !== myUsername);
-            document.getElementById('usersOnline').innerHTML = others.length === 0
-                ? '<div style="padding:20px;color:var(--text-secondary);text-align:center;font-size:13px;">Никого онлайн 😴</div>'
-                : others.map(u => {
-                    const sel = currentChat === u ? ' selected' : '';
-                    const lastMsg = allMessages[u]?.slice(-1)[0];
-                    const lastText = lastMsg ? (lastMsg.text ? lastMsg.text.substring(0, 30) : '❤️ Реакция') : '';
-                    return `
-                        <div class="user-item${sel}" onclick="openChat('${u}')">
-                            <div class="user-avatar" style="background:${getColor(u)}">${u.charAt(0).toUpperCase()}</div>
-                            <div class="user-info">
-                                <div class="user-name">${u}</div>
-                                <div class="user-last">${lastText || 'Нет сообщений'}</div>
-                            </div>
-                            <div class="online-dot"></div>
-                        </div>`;
-                }).join('');
+            var others = onlineUsers.filter(function(u){ return u !== myUsername; });
+            var html = '';
+            if (others.length === 0) {
+                html = '<div style="padding:20px;color:var(--text-secondary);text-align:center;font-size:13px;">Никого онлайн 😴</div>';
+            } else {
+                for (var i = 0; i < others.length; i++) {
+                    var u = others[i];
+                    var sel = currentChat === u ? ' selected' : '';
+                    var lastMsg = allMessages[u] ? allMessages[u][allMessages[u].length-1] : null;
+                    var lastText = lastMsg ? (lastMsg.text ? lastMsg.text.substring(0, 30) : '❤️ Реакция') : '';
+                    html += '<div class="user-item'+sel+'" onclick="openChat(\''+u+'\')">'+
+                        '<div class="user-avatar" style="background:'+getColor(u)+'">'+u.charAt(0).toUpperCase()+'</div>'+
+                        '<div class="user-info"><div class="user-name">'+u+'</div><div class="user-last">'+(lastText || 'Нет сообщений')+'</div></div>'+
+                        '<div class="online-dot"></div></div>';
+                }
+            }
+            document.getElementById('usersOnline').innerHTML = html;
         }
 
         function filterUsers() {
-            const q = document.getElementById('searchInput').value.toLowerCase();
-            document.querySelectorAll('.user-item').forEach(el => {
-                const name = el.querySelector('.user-name')?.textContent.toLowerCase() || '';
-                el.style.display = name.includes(q) ? 'flex' : 'none';
-            });
+            var q = document.getElementById('searchInput').value.toLowerCase();
+            var items = document.querySelectorAll('.user-item');
+            for (var i = 0; i < items.length; i++) {
+                var name = (items[i].querySelector('.user-name') || {}).textContent || '';
+                items[i].style.display = name.toLowerCase().indexOf(q) !== -1 ? 'flex' : 'none';
+            }
         }
 
         function getColor(name) {
-            let h = 0;
-            for (let i = 0; i < name.length; i++) h = name.charCodeAt(i) + ((h << 5) - h);
+            var h = 0;
+            for (var i = 0; i < name.length; i++) h = name.charCodeAt(i) + ((h << 5) - h);
             return COLORS[Math.abs(h) % COLORS.length];
         }
 
@@ -996,38 +1029,39 @@
 
         function saveToStorage() {
             try {
-                const data = {};
-                for (const [user, msgs] of Object.entries(allMessages)) {
-                    data[user] = msgs.slice(-500);
+                var data = {};
+                var keys = Object.keys(allMessages);
+                for (var i = 0; i < keys.length; i++) {
+                    data[keys[i]] = allMessages[keys[i]].slice(-500);
                 }
-                localStorage.setItem(`neonmess_msgs_${myUsername}`, JSON.stringify(data));
+                localStorage.setItem('neonmess_msgs_'+myUsername, JSON.stringify(data));
                 localStorage.setItem('neonmess_username', myUsername);
                 localStorage.setItem('neonmess_avatar', myAvatar);
             } catch(e) {}
         }
 
         function loadFromStorage() {
-            const saved = localStorage.getItem(`neonmess_msgs_${myUsername}`);
+            var saved = localStorage.getItem('neonmess_msgs_'+myUsername);
             if (saved) {
                 try { allMessages = JSON.parse(saved); } catch(e) { allMessages = {}; }
             }
         }
 
-        function esc(s) {
-            const div = document.createElement('div');
-            div.textContent = s;
-            return div.innerHTML;
+        function escHtml(s) {
+            var d = document.createElement('div');
+            d.textContent = s;
+            return d.innerHTML;
         }
 
         // Автовход
-        const savedUser = localStorage.getItem('neonmess_username');
-        const savedAvatar = localStorage.getItem('neonmess_avatar');
+        var savedUser = localStorage.getItem('neonmess_username');
+        var savedAvatar = localStorage.getItem('neonmess_avatar');
         if (savedUser) {
             myUsername = savedUser;
             myAvatar = savedAvatar || '';
             document.getElementById('nicknameInput').value = savedUser;
             if (savedAvatar) {
-                document.getElementById('loginAvatar').innerHTML = `<img src="${savedAvatar}"><div class="overlay">Аватар</div>`;
+                document.getElementById('loginAvatar').innerHTML = '<img src="'+savedAvatar+'"><div class="overlay">Аватар</div>';
                 tempAvatar = savedAvatar;
             }
             document.getElementById('passwordInput').placeholder = 'Введи пароль';
